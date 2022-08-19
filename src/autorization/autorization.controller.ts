@@ -1,19 +1,38 @@
-import AutorizationView from './autorization.view';
+import AutorizationModel from './autorization.model';
 
 class AutorizationController {
-  public listenLogin = () => {
+  public listenLoginButton = () => {
     const button = document.getElementById('login-button') as HTMLButtonElement;
     button.addEventListener('click', () => {
-      new AutorizationView().modal();
+      new AutorizationModel().drawModal();
       this.listenCloseModal();
+      this.listenLogin();
     });
   };
 
   public listenCloseModal = () => {
     const button = document.querySelector('.close-modal') as HTMLSpanElement;
-    const modal = document.getElementById('box') as HTMLDivElement;
     button.addEventListener('click', () => {
-      modal.remove();
+      new AutorizationModel().closeModal();
+    });
+  };
+
+  public listenLogin = () => {
+    const button = document.getElementById('sign-in') as HTMLInputElement;
+    const email = document.getElementById('input-email') as HTMLInputElement;
+    const password = document.getElementById('input-pass') as HTMLInputElement;
+    button.addEventListener('click', () => {
+      new AutorizationModel().login({
+        email: email.value,
+        password: password.value,
+      });
+    });
+  };
+
+  public listenLogoutButton = () => {
+    const button = document.getElementById('login-button') as HTMLButtonElement;
+    button.addEventListener('click', () => {
+      new AutorizationModel().logout();
     });
   };
 }

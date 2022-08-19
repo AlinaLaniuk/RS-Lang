@@ -18,7 +18,7 @@
   filter: alpha(opacity=30);
 }
 
-#box form {
+.form-wrapper {
   position: absolute;
   top: 0;
   bottom: 0;
