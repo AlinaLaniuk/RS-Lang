@@ -32,7 +32,6 @@ class AutorizationAPI extends API {
     } else {
       const { message } = (await rawResponse.json()).error.errors[0];
       result = message;
-      // new AutorizationModel().showRegistrationError(message);
     }
 
     return result;
