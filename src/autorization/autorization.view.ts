@@ -52,61 +52,59 @@ class AutorizationView {
     header.appendChild(root);
   };
 
-  private loginContent = (): string => {
-    return `<table>
-              <tr>
-                <td>Email</td>
-                <td>
-                  <input id="input-email">
-                </td>
-              </tr>
-              <tr>
-                <td>Password</td>
-                <td>
-                  <input id="input-pass">
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2" id='login-error'></td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <button id="sign-in"> Sign in </button>
-                </td>
-              </tr>
-            </table>`;
-  };
+  private loginContent = (): string => `
+  <table>
+    <tr>
+      <td>Email</td>
+      <td>
+        <input id="input-email">
+      </td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td>
+        <input id="input-pass">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" id='login-error'></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button id="sign-in"> Sign in </button>
+      </td>
+    </tr>
+  </table>`;
 
-  private registrationContent = (): string => {
-    return `<table>
-              <tr>
-                <td>Name</td>
-                <td>
-                  <input id="reg-name">
-                </td>
-              </tr>
-              <tr>
-              <td>Email</td>
-                <td>
-                  <input id="reg-email">
-                </td>
-              </tr>
-              <tr>
-                <td>Password</td>
-                <td>
-                  <input id="reg-pass">
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2" id='register-error'></td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <button id="sign-up"> Sign up </button>
-                </td>
-              </tr>
-            </table>`;
-  };
+  private registrationContent = (): string => `
+  <table>
+    <tr>
+      <td>Name</td>
+      <td>
+        <input id="reg-name">
+      </td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td>
+        <input id="reg-email">
+      </td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td>
+        <input id="reg-pass">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" id='register-error'></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button id="sign-up"> Sign up </button>
+      </td>
+    </tr>
+  </table>`;
 }
 
 export default AutorizationView;

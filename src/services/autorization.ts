@@ -1,9 +1,8 @@
 import { INewUser, IUser } from '../types/user';
-import AutorizationModel from '../autorization/autorization.model';
 import API from './api';
 
 class AutorizationAPI extends API {
-  public login = async (user: IUser) => {
+  public login = async (user: IUser): Promise<Response> => {
     const rawResponse = await fetch(`${this.url}signin`, {
       method: 'POST',
       headers: {
@@ -12,12 +11,8 @@ class AutorizationAPI extends API {
       },
       body: JSON.stringify(user),
     });
-    if (rawResponse.status === 200) {
-      new AutorizationModel().closeModal();
-      new AutorizationModel().saveInfo(await rawResponse.json());
-    } else {
-      new AutorizationModel().showLoginError(rawResponse.status);
-    }
+
+    return rawResponse;
   };
 
   public registration = async (user: INewUser) => {
@@ -30,12 +25,17 @@ class AutorizationAPI extends API {
       body: JSON.stringify(user),
     });
 
+    let result = 'Ok';
+
     if (rawResponse.status === 200) {
       this.login({ email: user.email, password: user.password });
     } else {
-      const message = (await rawResponse.json()).error.errors[0].message;
-      new AutorizationModel().showRegistrationError(message);
+      const { message } = (await rawResponse.json()).error.errors[0];
+      result = message;
+      // new AutorizationModel().showRegistrationError(message);
     }
+
+    return result;
   };
 }
 

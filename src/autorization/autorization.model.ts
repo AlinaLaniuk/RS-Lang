@@ -1,6 +1,5 @@
 import AutorizationAPI from '../services/autorization';
 import { IAutentificationInfo, INewUser, IUser } from '../types/user';
-import AutorizationController from './autorization.controller';
 import AutorizationView from './autorization.view';
 
 class AutorizationModel {
@@ -14,9 +13,7 @@ class AutorizationModel {
   };
 
   public showLoginError = (statusCode: number) => {
-    const wrapper = document.getElementById(
-      'login-error'
-    ) as HTMLTableCellElement;
+    const wrapper = document.getElementById('login-error') as HTMLElement;
     if (document.querySelector('.error-message') as HTMLDivElement) {
       wrapper.lastChild?.remove();
     }
@@ -30,9 +27,7 @@ class AutorizationModel {
   };
 
   public showRegistrationError = (apiAnswer: string) => {
-    const wrapper = document.getElementById(
-      'register-error'
-    ) as HTMLTableCellElement;
+    const wrapper = document.getElementById('register-error') as HTMLElement;
     if (document.querySelector('.reg-error') as HTMLDivElement) {
       wrapper.lastChild?.remove();
     }
@@ -56,52 +51,52 @@ class AutorizationModel {
   };
 
   public saveInfo = (info: IAutentificationInfo) => {
-    const infoWithExpiredTime = {
+    const fullInfo = {
       ...info,
       tokenExpired: this.expiredTime(),
     };
-    localStorage.setItem(
-      'autentificationInfo',
-      JSON.stringify(infoWithExpiredTime)
-    );
+    localStorage.setItem('autentificationInfo', JSON.stringify(fullInfo));
     this.isLogedIn();
   };
 
   public isLogedIn = () => {
-    const info = JSON.parse(
-      localStorage.getItem('autentificationInfo') || '{}'
-    );
-    const authenticated =
-      info &&
-      info.message === 'Authenticated' &&
-      new Date(info.tokenExpired) > new Date();
+    const info = JSON.parse(localStorage.getItem('autentificationInfo') || '{}');
+    const tokenExpired = new Date(info.tokenExpired) > new Date();
+    const authenticated = info && info.message === 'Authenticated' && tokenExpired;
     new AutorizationView().loginButton(authenticated);
-    authenticated
-      ? new AutorizationController().listenLogoutButton()
-      : new AutorizationController().listenLoginButton();
+    return authenticated;
   };
 
   public logout = () => {
     localStorage.removeItem('autentificationInfo');
     new AutorizationView().loginButton(false);
-    new AutorizationController().listenLoginButton();
   };
 
-  public login = (user: IUser) => {
-    new AutorizationAPI().login({
+  public login = async (user: IUser) => {
+    const response = new AutorizationAPI().login({
       email: user.email,
       password: user.password,
     });
+    if ((await response).status === 200) {
+      this.closeModal();
+      this.saveInfo(await (await response).json());
+    } else {
+      this.showLoginError((await response).status);
+    }
   };
 
-  public register = (user: INewUser) => {
-    new AutorizationAPI().registration({
+  public register = async (user: INewUser) => {
+    const message = new AutorizationAPI().registration({
       name: user.name,
       email: user.email,
       password: user.password,
     });
+    if ((await message) !== 'Ok') {
+      this.showRegistrationError(await message);
+    }
   };
 
+  // TODO: Можно вынести в utils
   private expiredTime = () => {
     const currentDate = new Date();
     currentDate.setTime(currentDate.getTime() + 4 * 60 * 60 * 1000);
