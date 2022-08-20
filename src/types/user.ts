@@ -3,6 +3,10 @@ export interface IUser {
   password: string;
 }
 
+export interface INewUser extends IUser {
+  name: string;
+}
+
 export interface IAutentificationInfo {
   message: string;
   name: string;

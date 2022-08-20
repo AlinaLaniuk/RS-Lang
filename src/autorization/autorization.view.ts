@@ -7,30 +7,19 @@ class AutorizationView {
         <div id="box-inner">
         </div>
         <div class="form-wrapper">
-        <span class="close-modal">X</span>
-        <h3 class="modal-title">Login</h3>
-          <table>
-            <tr>
-              <td>Email</td>
-              <td>
-                <input id="input-email">
-              </td>
-            </tr>
-            <tr>
-              <td>Password</td>
-              <td>
-                <input id="input-pass">
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <button id="sign-in"> Sign in </button>
-                </td>
-              <td>
-                <button id="sign-up"> Registration </button>
-              </td>
-            </tr>
-          </table>
+          <div class="tabs">
+            <input type="radio" name="tab-btn" id="tab-btn-1" value="" checked>
+            <label for="tab-btn-1">Login</label>
+            <input type="radio" name="tab-btn" id="tab-btn-2" value="">
+            <label for="tab-btn-2">Registration</label>
+            <div id="content-login">
+              ${this.loginContent()}
+            </div>
+            <div id="content-registration">
+              ${this.registrationContent()}
+            </div>
+          </div>
+          <span class="close-modal">X</span>
         </div>`;
     const root = document.createElement('div');
     root.id = 'box';
@@ -51,7 +40,7 @@ class AutorizationView {
         <span style="display: flex; align-items: center;">
           <img
             src="/assets/img/authorization.svg"
-            width="64px"
+            width="32px"
             height="32px"
             viewBox="0 0 528.37 688.86"
           />
@@ -61,6 +50,62 @@ class AutorizationView {
     const root = document.createElement('div');
     root.innerHTML = html;
     header.appendChild(root);
+  };
+
+  private loginContent = (): string => {
+    return `<table>
+              <tr>
+                <td>Email</td>
+                <td>
+                  <input id="input-email">
+                </td>
+              </tr>
+              <tr>
+                <td>Password</td>
+                <td>
+                  <input id="input-pass">
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" id='login-error'></td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <button id="sign-in"> Sign in </button>
+                </td>
+              </tr>
+            </table>`;
+  };
+
+  private registrationContent = (): string => {
+    return `<table>
+              <tr>
+                <td>Name</td>
+                <td>
+                  <input id="reg-name">
+                </td>
+              </tr>
+              <tr>
+              <td>Email</td>
+                <td>
+                  <input id="reg-email">
+                </td>
+              </tr>
+              <tr>
+                <td>Password</td>
+                <td>
+                  <input id="reg-pass">
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" id='register-error'></td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <button id="sign-up"> Sign up </button>
+                </td>
+              </tr>
+            </table>`;
   };
 }
 

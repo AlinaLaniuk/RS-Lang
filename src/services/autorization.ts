@@ -1,4 +1,4 @@
-import { IUser } from '../types/user';
+import { INewUser, IUser } from '../types/user';
 import AutorizationModel from '../autorization/autorization.model';
 import API from './api';
 
@@ -16,25 +16,11 @@ class AutorizationAPI extends API {
       new AutorizationModel().closeModal();
       new AutorizationModel().saveInfo(await rawResponse.json());
     } else {
-      new AutorizationModel().showValidationError(rawResponse.status);
+      new AutorizationModel().showLoginError(rawResponse.status);
     }
   };
 
-  // public registration = async (user: IUser) => {
-  //   const rawResponse = await fetch(`${API_URL}users`, {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(user),
-  //   });
-  //   const content = await rawResponse.json();
-
-  //   console.log(content);
-  // };
-
-  public logout = async (user: IUser) => {
+  public registration = async (user: INewUser) => {
     const rawResponse = await fetch(`${this.url}users`, {
       method: 'POST',
       headers: {
@@ -43,9 +29,13 @@ class AutorizationAPI extends API {
       },
       body: JSON.stringify(user),
     });
-    const content = await rawResponse.json();
 
-    console.log(content);
+    if (rawResponse.status === 200) {
+      this.login({ email: user.email, password: user.password });
+    } else {
+      const message = (await rawResponse.json()).error.errors[0].message;
+      new AutorizationModel().showRegistrationError(message);
+    }
   };
 }
 
