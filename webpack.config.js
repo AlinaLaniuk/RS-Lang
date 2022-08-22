@@ -42,6 +42,7 @@ const baseConfig = {
         {
           from: './src/assets',
           to: 'assets',
+          noErrorOnMissing: true
         },
       ],
     }),
