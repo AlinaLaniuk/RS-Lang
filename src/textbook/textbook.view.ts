@@ -56,3 +56,22 @@ export class WordCard {
     );
   }
 }
+export function setPaginationPanel() {
+  document.body.insertAdjacentHTML(
+    'beforeend',
+    `<div class="pagination-wrapper">
+       <ul class="pagination">
+          <li id="prev" class="pagination-button frame"><span>Prev</span></li>
+          <li class="pagination-button frame"><span>1</span></li>
+          <li class="pagination-button frame"><span>2</span></li>
+          <li class="pagination-button frame"><span>...</span></li>
+          <li class="pagination-button frame"><span>4</span></li>
+          <li class="pagination-button frame"><span>5</span></li>
+          <li class="pagination-button frame"><span>...</span></li>
+          <li class="pagination-button frame"><span>30</span></li>
+          <li id="next" class="pagination-button frame"><span>Next</span></li>
+       </ul>
+    </div>
+    `,
+  );
+}
