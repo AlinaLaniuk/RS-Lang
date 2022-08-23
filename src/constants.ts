@@ -9,4 +9,23 @@ export const enum PageIds {
   ChallengePage = 'challenge',
 }
 
+export const NavigationButtons = [
+  {
+    id: PageIds.MainPage,
+    text: 'Main',
+  },
+  {
+    id: PageIds.TextbookPage,
+    text: 'Textbook',
+  },
+  {
+    id: PageIds.GamesPage,
+    text: 'Games',
+  },
+  {
+    id: PageIds.StatsPage,
+    text: 'Stats',
+  },
+];
+
 export default { API_URL };
