@@ -1,0 +1,107 @@
+#box {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+}
+
+#box-inner {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  background: #6e6c79;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+}
+
+.form-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  height: 300px;
+  width: 300px;
+  border: 1px solid #3b3b3d;
+  padding: 5px 5px 5px 5px;
+  background: #ffffff;
+}
+
+/* https://itchief.ru/javascript/tabs */
+.tabs {
+  font-size: 0;
+}
+
+.tabs > input[type='radio'] {
+  display: none;
+}
+
+.tabs > div {
+  display: none;
+  border: 1px solid #e0e0e0;
+  padding: 10px 15px;
+  font-size: 16px;
+}
+
+#tab-btn-1:checked ~ #content-login,
+#tab-btn-2:checked ~ #content-registration {
+  display: block;
+}
+
+.tabs > label {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: rgba(122, 169, 153, 0.4);
+  border: 1px solid #e0e0e0;
+  padding: 2px 8px;
+  font-size: 16px;
+  line-height: 1.5;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  top: 1px;
+}
+
+.tabs > label:not(:first-of-type) {
+  border-left: none;
+}
+
+.tabs > input[type='radio']:checked + label {
+  background-color: #fff;
+  border-bottom: 1px solid #fff;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+#login-button,
+#sign-in,
+#sign-up {
+  background-color: white;
+  padding: 10px 15px;
+  font-size: 1em;
+  color: black;
+  border: 2px solid #3b3b3d;
+  transition-duration: 0.4s;
+}
+
+#login-button {
+  min-width: 175px;
+}
+
+#login-button:hover,
+#sign-in:hover,
+#sign-up:hover {
+  background-color: rgba(122, 169, 153, 0.4);
+}
