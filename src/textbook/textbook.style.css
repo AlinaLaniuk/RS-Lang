@@ -86,15 +86,19 @@
     list-style-type: none;
     justify-content: space-between;
 }
-.pagination > span{
-    display: block;
-}
 .pagination-button{
     width: 30px;
     height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.pagination-button:hover{
+    background-color: #908F9B;
+    cursor: pointer;
+}
+.active{
+    background-color: #908F9B;
 }
 #prev{
     width: 50px;
