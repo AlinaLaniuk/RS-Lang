@@ -4,10 +4,33 @@ import TextbookView from './textbook.view';
 
 const textbookModel = new TextbookModel();
 const textbookView = new TextbookView();
+
+function promisifyAudioPlaying(mediaElement: HTMLMediaElement):Promise<void> {
+  return new Promise((resolve) => {
+    mediaElement.addEventListener('ended', () => {
+      resolve();
+    });
+    mediaElement.play();
+  });
+}
+
 class TextbookController {
   currentPage = 1;
 
-  totalPage = 30;
+  currentLevel = 0;
+
+  levelPanelListener() {
+    const levelPanel = document.querySelector('.level-panel') as HTMLElement;
+    levelPanel.addEventListener('click', (event) => {
+      const eventTarget = event.target as HTMLElement;
+      if (eventTarget.classList.contains('level-button')) {
+        this.currentLevel = +(eventTarget.dataset.id as string);
+        this.currentPage = 1;
+        this.createWordCards(this.currentLevel, this.currentPage);
+        textbookView.createPagination(this.currentPage);
+      }
+    });
+  }
 
   paginationListener() {
     const paginationPanel = document.body.querySelector('.pagination-wrapper') as HTMLElement;
@@ -19,70 +42,56 @@ class TextbookController {
           this.currentPage += 1;
         } else if (eventTargetContent === 'Prev') {
           this.currentPage -= 1;
-        } else if (this.currentPage < this.totalPage - 1) {
+        } else if (this.currentPage < textbookView.totalPage - 1) {
           this.currentPage = +eventTargetContent;
         }
-        this.createPagination(this.currentPage);
-        textbookModel.getWordsInfo()
-          .then((wordsInfo) => {
-            wordsInfo.forEach((wordInfo: IWordInfo) => {
-              textbookView.setWordCard(wordInfo);
-            });
-          });
+        textbookView.createPagination(this.currentPage);
+        this.createWordCards(this.currentLevel, this.currentPage);
       }
     });
   }
 
-  createPagination(page: number) {
-    const paginationPanel = document.querySelector('.pagination') as HTMLElement;
-    let liTag = '';
-    let active;
-    let beforePage = page - 1;
-    let afterPage = page + 1;
-    if (afterPage === 31) {
-      afterPage = 30;
-    }
-    if (page > 1) {
-      liTag += '<li class="pagination-button frame">Prev</li>';
-    }
-    if (page > 2) {
-      liTag += '<li class="pagination-button frame">1</li>';
-      if (page > 3) {
-        liTag += '<li class="pagination-button frame">...</li>';
-      }
-    }
-    if (page === this.totalPage) {
-      beforePage -= 2;
-    } else if (page === this.totalPage - 1) {
-      beforePage -= 1;
-    }
-    if (page === 1) {
-      afterPage += 2;
-    } else if (page === 2) {
-      afterPage += 1;
-    }
-    for (let pagesBetweenDots = beforePage; pagesBetweenDots <= afterPage; pagesBetweenDots += 1) {
-      if (pagesBetweenDots === 0) {
-        pagesBetweenDots += 1;
-      }
-      if (page === pagesBetweenDots) {
-        active = 'active';
-      } else {
-        active = '';
-      }
-      liTag += `<li class="pagination-button frame ${active}">${pagesBetweenDots}</li>`;
-    }
-    if (page <= this.totalPage - 1) {
-      if (page < this.totalPage - 2) {
-        liTag += '<li class="pagination-button frame">...</li>';
-      }
-      // liTag += `<li class="pagination-button frame">${this.totalPage}</li>`;
-    }
-    if (page < this.totalPage) {
-      liTag += '<li class="pagination-button frame">Next</li>';
-    }
-    paginationPanel.innerHTML = liTag;
-    return liTag;
+  createWordCards(level: number, page: number) {
+    const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
+    wordCardWrapper.innerHTML = '';
+    textbookModel.getWordsInfo(level, page)
+      .then((wordsInfo) => {
+        wordsInfo.forEach((wordInfo: IWordInfo) => {
+          textbookView.setWordCard(wordInfo);
+          this.audioButtonListener();
+        });
+      });
+  }
+
+  audioButtonListener() {
+    const audioButtonCollection = document.querySelectorAll('.word-card_info_sound');
+    audioButtonCollection.forEach((audioButton) => {
+      audioButton.addEventListener('click', (event) => {
+        const eventTarget = event.target as HTMLElement;
+        const eventTargetParent = eventTarget.closest('.word-card_info_sound') as HTMLElement;
+        const audioCollection = eventTargetParent.querySelectorAll('.audio') as NodeListOf<HTMLMediaElement>;
+        let audioPlayingPromise: Promise<void> = Promise.resolve();
+        audioCollection.forEach((audio: HTMLMediaElement) => {
+          audioPlayingPromise = audioPlayingPromise.then(() => promisifyAudioPlaying(audio));
+        });
+      });
+    });
+  }
+
+  launch() {
+    textbookView.setLevelPanel();
+    this.levelPanelListener();
+    textbookView.setPaginationPanel();
+    textbookView.setWordCardWrapper();
+    this.paginationListener();
+    this.createWordCards(0, this.currentPage);
   }
 }
 export default TextbookController;
+
+
+
+import TextBookController from './textbook/textbook.controller';
+
+const textbookController = new TextBookController();
+textbookController.launch();

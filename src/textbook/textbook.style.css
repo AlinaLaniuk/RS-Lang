@@ -7,7 +7,7 @@
     display: flex;
     justify-content: space-between;
 }
-.level-panel > button{
+.level-button{
     border: none;
     width: 8%;
     height: 30px;
@@ -29,6 +29,9 @@
 }
 .level-6{
     background-color: #7C6BF7;
+}
+.my-words{
+    background-color:rgb(132, 206, 208);
 }
 .level-page-info{
     width: 80px;

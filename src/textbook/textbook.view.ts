@@ -1,17 +1,21 @@
 import './textbook.style.css';
 import IWordInfo from '../types/textbook.types';
-import TextbookController from './textbook.controller';
 
-const textbookController = new TextbookController();
 class TextbookView {
-//   data: IWordInfo;
+  totalPage = 30;
 
-  //   constructor(wordInfo: IWordInfo) {
-  //     this.data = wordInfo;
-  //   }
+  setWordCardWrapper() {
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `<div class="word-card-wrapper">
+      </div>
+     `,
+    );
+  }
 
   setWordCard(data: IWordInfo) {
-    document.body.insertAdjacentHTML(
+    const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
+    wordCardWrapper.insertAdjacentHTML(
       'beforeend',
       `<div class="frame word-card">
            <div class="word-card-img-wrapper">
@@ -25,7 +29,10 @@ class TextbookView {
                     <span>${data.wordTranslate}</span>
                  </div>
                  <div class="word-card_info_sound">
-                    <img src="./assets/sound.svg">
+                    <img class="audio-button" src="./assets/sound.svg">
+                    <audio class="audio" src="https://team-171.herokuapp.com/${data.audio}">
+                    <audio class="audio" src="https://team-171.herokuapp.com/${data.audioMeaning}">
+                    <audio class="audio" src="https://team-171.herokuapp.com/${data.audioExample}">
                  </div>
               </div>
               <div class="word-card_info_meaning">
@@ -45,12 +52,13 @@ class TextbookView {
     document.body.insertAdjacentHTML(
       'beforeend',
       `<div class="level-panel">
-           <button class="level-1">Level 1</button>
-           <button class="level-2">Level 2</button>
-           <button class="level-3">Level 3</button>
-           <button class="level-4">Level 4</button>
-           <button class="level-5">Level 5</button>
-           <button class="level-6">Level 6</button>
+           <button data-id="0" class="level-button level-1">Level 1</button>
+           <button data-id="1" class="level-button level-2">Level 2</button>
+           <button data-id="2" class="level-button level-3">Level 3</button>
+           <button data-id="3" class="level-button level-4">Level 4</button>
+           <button data-id="4" class="level-button level-5">Level 5</button>
+           <button data-id="5" class="level-button level-6">Level 6</button>
+           <button data-id="6" class="level-button my-words">My words</button>
        </div>
        <div class="frame level-page-info">
            <span>Level 1</span>
@@ -68,8 +76,58 @@ class TextbookView {
      </div>
      `,
     );
-    textbookController.paginationListener();
-    textbookController.createPagination(1);
+    this.createPagination(1);
+  }
+
+  createPagination(page: number) {
+    const paginationPanel = document.querySelector('.pagination') as HTMLElement;
+    let liTag = '';
+    let active;
+    let beforePage = page - 1;
+    let afterPage = page + 1;
+    if (afterPage === 31) {
+      afterPage = 30;
+    }
+    if (page > 1) {
+      liTag += '<li class="pagination-button frame">Prev</li>';
+    }
+    if (page > 2) {
+      liTag += '<li class="pagination-button frame">1</li>';
+      if (page > 3) {
+        liTag += '<li class="pagination-button frame">...</li>';
+      }
+    }
+    if (page === this.totalPage) {
+      beforePage -= 2;
+    } else if (page === this.totalPage - 1) {
+      beforePage -= 1;
+    }
+    if (page === 1) {
+      afterPage += 2;
+    } else if (page === 2) {
+      afterPage += 1;
+    }
+    for (let pagesBetweenDots = beforePage; pagesBetweenDots <= afterPage; pagesBetweenDots += 1) {
+      if (pagesBetweenDots === 0) {
+        pagesBetweenDots += 1;
+      }
+      if (page === pagesBetweenDots) {
+        active = 'active';
+      } else {
+        active = '';
+      }
+      liTag += `<li class="pagination-button frame ${active}">${pagesBetweenDots}</li>`;
+    }
+    if (page <= this.totalPage - 1) {
+      if (page < this.totalPage - 2) {
+        liTag += '<li class="pagination-button frame">...</li>';
+      }
+    }
+    if (page < this.totalPage) {
+      liTag += '<li class="pagination-button frame">Next</li>';
+    }
+    paginationPanel.innerHTML = liTag;
+    return liTag;
   }
 }
 export default TextbookView;
