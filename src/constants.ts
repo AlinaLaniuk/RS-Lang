@@ -1,5 +1,3 @@
-const API_URL = 'https://team-171.herokuapp.com/';
-
 export const enum PageIds {
   MainPage = 'main',
   GamesPage = 'games',
@@ -27,5 +25,3 @@ export const NavigationButtons = [
     text: 'Stats',
   },
 ];
-
-export default { API_URL };

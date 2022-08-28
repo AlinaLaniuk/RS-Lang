@@ -72,7 +72,7 @@ class AutorizationModel {
     new AutorizationView().loginButton(false);
   };
 
-  public login = async (user: IUser) => {
+  public login = async (user: IUser):Promise<boolean> => {
     const response = new AutorizationAPI().login({
       email: user.email,
       password: user.password,
@@ -80,12 +80,13 @@ class AutorizationModel {
     if ((await response).status === 200) {
       this.closeModal();
       this.saveInfo(await (await response).json());
-    } else {
-      this.showLoginError((await response).status);
+      return true;
     }
+    this.showLoginError((await response).status);
+    return false;
   };
 
-  public register = async (user: INewUser) => {
+  public register = async (user: INewUser):Promise<boolean> => {
     const message = new AutorizationAPI().registration({
       name: user.name,
       email: user.email,
@@ -93,7 +94,9 @@ class AutorizationModel {
     });
     if ((await message) !== 'Ok') {
       this.showRegistrationError(await message);
+      return true;
     }
+    return false;
   };
 
   // TODO: Можно вынести в utils
