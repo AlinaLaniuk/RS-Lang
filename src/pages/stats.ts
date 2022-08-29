@@ -1,6 +1,12 @@
+import { Chart, registerables } from 'chart.js';
 import { PageIds } from '../constants';
 import StatsAPI from '../services/stats';
-import { IComponent, IGameStat, IStats } from '../types/interfaces';
+import {
+  IComponent,
+  IGameStat,
+  IStats,
+  ITotalLearnedStat,
+} from '../types/interfaces';
 import './stats.style.css';
 
 class StatsPage implements IComponent {
@@ -17,38 +23,38 @@ class StatsPage implements IComponent {
   }
 
   private async getStats() {
-    const response = await new StatsAPI().getStats() as IStats;
-    const { sprint, audioChallenge } = response.optional;
-    const { learnedWords } = response;
+    const response = await new StatsAPI().getStats();
+    const { sprint, audioChallenge, totalWords } = response.optional;
     const currentDate = new Date().toISOString().split('T')[0];
-    const sprintSeries = response.optional.longestSeries.sprint || 0;
     const lastSprint = Object.values(sprint)[Object.keys(sprint).length - 1];
     const sprintData = currentDate === lastSprint.day ? lastSprint : undefined;
-    const sprintBlock = this.gameBlock('Sprint', sprintData, sprintSeries);
+    const sprintBlock = this.gameBlock('Sprint', sprintData);
 
-    const challengeSeries = response.optional.longestSeries.audioChallenge || 0;
     const lastChallenge = Object.values(audioChallenge)[Object.keys(audioChallenge).length - 1];
     const challengeData = currentDate === lastChallenge.day ? lastChallenge : undefined;
-    const challengeBlock = this.gameBlock('Audio challenge', challengeData, challengeSeries);
+    const challengeBlock = this.gameBlock('Audio challenge', challengeData);
 
-    const todayBlock = this.todayStatBlock(learnedWords, sprintData, challengeData);
+    const lastDay = Object.values(totalWords)[Object.keys(audioChallenge).length - 1];
+    const todayData = currentDate === lastDay.day ? lastDay : undefined;
+    const todayBlock = this.todayStatBlock(todayData, sprintData, challengeData);
 
     const games = document.createElement('div');
     games.className = 'games-wrapper';
     games.innerHTML = todayBlock + sprintBlock + challengeBlock;
     this.page.appendChild(games);
+    this.renderCharts(response);
   }
 
-  private gameBlock(name: string, stats?: IGameStat, series?: number) {
+  private gameBlock(name: string, stats?: IGameStat) {
     return `
     <div class='game-block'>
       <h2>${name}</h2>
       <div class='today-stats-in-game'>
         <div class='new-words'>
-          <span>${stats ? stats.newWords : 0}</span><span> new words</span>
+          <span>${stats ? JSON.parse(stats.newWords).length : 0}</span><span> new words</span>
         </div>
         <div class='best-result'>
-          <span>${series}</span><span> best result</span>
+          <span>${stats ? stats.longestSeries : 0}</span><span> best series</span>
         </div>
         <div class='correct-answers'>
           <span>${stats ? stats.percentCorrectAnswers : 0}%</span><span> correct answers</span>
@@ -58,23 +64,118 @@ class StatsPage implements IComponent {
     `;
   }
 
-  private todayStatBlock(learnedWords: number, sprint?: IGameStat, challenge?: IGameStat) {
+  private todayStatBlock(todayData?: ITotalLearnedStat, sprint?: IGameStat, challenge?: IGameStat) {
+    const sprintWords = sprint ? JSON.parse(sprint.newWords).length : 0;
+    const challengeWords = challenge ? JSON.parse(challenge.newWords.replace(/'/g, '"')).length : 0;
+    let procent;
+    if (sprint && challenge) {
+      procent = sprint.percentCorrectAnswers + challenge.percentCorrectAnswers / 2;
+    } else if (sprint) {
+      procent = sprint.percentCorrectAnswers;
+    } else if (challenge) {
+      procent = challenge.percentCorrectAnswers;
+    } else {
+      procent = 0;
+    }
     return `
     <div class='today-block'>
       <h2>Today stats</h2>
       <div class='today-stats'>
         <div class='new-words'>
-          <span>${(sprint ? sprint.newWords : 0) + (challenge ? challenge.newWords : 0)}</span><span> new words</span>
+          <span>${sprintWords + challengeWords}</span><span> new words</span>
         </div>
         <div class='learned-words'>
-          <span>${learnedWords}</span><span> learned words</span>
+          <span>${todayData ? todayData.learned : 0}</span><span> learned words</span>
         </div>
         <div class='correct-answers'>
-          <span>${((sprint ? sprint.percentCorrectAnswers : 0) + (challenge ? challenge.percentCorrectAnswers : 0)) / 2}%</span><span> correct answers</span>
+          <span>${procent}%</span><span> correct answers</span>
         </div>
       </div>
     </div>
     `;
+  }
+
+  private renderCharts(stats: IStats) {
+    const chartsWrapper = document.createElement('div');
+    const canvas = '<canvas id="newWordsChart" width="400" height="400"></canvas><canvas id="totalWordsChart" width="400" height="400"></canvas>';
+    chartsWrapper.className = 'charts-wrapper';
+    chartsWrapper.innerHTML = canvas;
+    this.page.appendChild(chartsWrapper);
+
+    const lastDates:Array<number> = [];
+    for (let i = 0; i < 10; i += 1) {
+      lastDates.unshift(new Date().setDate(new Date().getDate() - i));
+    }
+    const strDates:Array<string> = lastDates.map((el) => new Date(el).toISOString().split('T')[0]);
+
+    const defaultData:Array<number> = Array(10).fill(0);
+    Object.values(stats.optional.sprint).forEach((el) => {
+      const { day, newWords } = el;
+      if (strDates.includes(day)) {
+        defaultData.splice(strDates.indexOf(day), 1, JSON.parse(newWords.replace(/'/g, '"')).length);
+      }
+    });
+
+    Object.values(stats.optional.audioChallenge).forEach((el) => {
+      const { day, newWords } = el;
+      const arr = newWords.replace(/'/g, '"');
+      if (strDates.includes(day)) {
+        const sum = defaultData[strDates.indexOf(day)] + JSON.parse(arr).length;
+        defaultData.splice(strDates.indexOf(day), 1, sum);
+      }
+    });
+
+    const totalLearned:Array<number> = Array(10).fill(0);
+    Object.values(stats.optional.totalWords).forEach((el) => {
+      const { day, learned } = el;
+      console.log(stats.optional);
+      const arr = learned.replace(/'/g, '"');
+      if (strDates.includes(day)) {
+        totalLearned.splice(strDates.indexOf(day), 1, JSON.parse(arr).length);
+      }
+    });
+    let temp = 0;
+    totalLearned.reverse().forEach((el, index) => {
+      if (index === 0) {
+        temp = el;
+        totalLearned.splice(index, 1, stats.learnedWords);
+      } else {
+        const current = totalLearned[index - 1] - temp;
+        temp = el;
+        totalLearned.splice(index, 1, current);
+      }
+    });
+
+    this.drawChart(strDates, defaultData, 'New words');
+    this.drawChart(strDates, totalLearned.reverse(), 'Total learned');
+  }
+
+  private drawChart(lastDates: Array<string>, data: Array<number>, label: string) {
+    const type = label === 'New words' ? 'newWordsChart' : 'totalWordsChart';
+    const ctx = (document.getElementById(type) as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D;
+
+    Chart.register(...registerables);
+    return new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: lastDates,
+        datasets: [{
+          label,
+          backgroundColor: 'rgb(255, 255, 255)',
+          borderColor: '#7AA999',
+          data,
+        }],
+      },
+      options: {
+        scales: {
+          y: {
+            ticks: {
+              stepSize: 1,
+            },
+          },
+        },
+      },
+    });
   }
 }
 

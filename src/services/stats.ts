@@ -1,7 +1,8 @@
+import { IStats } from '../types/interfaces';
 import API from './api';
 
 class StatsAPI extends API {
-  public getStats = async () => {
+  public getStats = async (): Promise<IStats> => {
     const { userId, token } = JSON.parse(localStorage.getItem('autentificationInfo') as string);
     const rawResponse = await fetch(`${this.url}users/${userId}/statistics`, {
       method: 'GET',
@@ -10,6 +11,20 @@ class StatsAPI extends API {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+    });
+    return rawResponse.json();
+  };
+
+  public setStats = async (stats: IStats) => {
+    const { userId, token } = JSON.parse(localStorage.getItem('autentificationInfo') as string);
+    const rawResponse = await fetch(`${this.url}users/${userId}/statistics`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(stats),
     });
     return rawResponse.json();
   };

@@ -1,8 +1,10 @@
 #stats {
     background-color: #BDAEF8;
-    height: 100vh;
+    height: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
 }
 
 .games-wrapper {
@@ -26,4 +28,16 @@ h2 {
     margin: 10px, 10px;
     padding: 5px 5px;
     min-width: 200px;
+}
+
+.charts-wrapper {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+canvas {
+    max-width: 400px;
+    max-height: 400px;
+    background-color: #fff;
 }

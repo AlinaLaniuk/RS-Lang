@@ -59,7 +59,7 @@ class AutorizationModel {
     this.isLogedIn();
   };
 
-  public isLogedIn = () => {
+  public isLogedIn = ():boolean => {
     const info = JSON.parse(localStorage.getItem('autentificationInfo') || '{}');
     const tokenExpired = new Date(info.tokenExpired) > new Date();
     const authenticated = info && info.message === 'Authenticated' && tokenExpired;

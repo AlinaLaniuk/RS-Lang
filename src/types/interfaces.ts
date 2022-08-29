@@ -8,15 +8,18 @@ export interface IStats {
   optional: {
     sprint: { [key: number]: IGameStat; };
     audioChallenge: { [key: number]: IGameStat; };
-    longestSeries: {
-      sprint: number;
-      audioChallenge: number;
-    }
+    totalWords: { [key: number]: ITotalLearnedStat; }
   }
 }
 
 export interface IGameStat {
   day: string;
-  newWords: number;
+  newWords: string;
   percentCorrectAnswers: number;
+  longestSeries: number;
+}
+
+export interface ITotalLearnedStat {
+  day: string;
+  learned: string;
 }
