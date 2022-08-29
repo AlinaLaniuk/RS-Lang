@@ -88,10 +88,3 @@ class TextbookController {
   }
 }
 export default TextbookController;
-
-
-
-import TextBookController from './textbook/textbook.controller';
-
-const textbookController = new TextBookController();
-textbookController.launch();
