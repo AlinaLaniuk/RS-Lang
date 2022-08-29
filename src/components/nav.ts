@@ -1,3 +1,4 @@
+import AutorizationModel from '../autorization/autorization.model';
 import { NavigationButtons } from '../constants';
 import { IComponent } from '../types/interfaces';
 
@@ -10,7 +11,9 @@ class Nav implements IComponent {
 
   private renderNavButtons(): void {
     const navButtons = document.createElement('div');
-    NavigationButtons.forEach((btn) => {
+    const auth = new AutorizationModel().isLogedIn();
+    const buttons = auth ? NavigationButtons : NavigationButtons.filter((el) => el.text !== 'Stats');
+    buttons.forEach((btn) => {
       const btnHTML = document.createElement('a');
       btnHTML.href = `#${btn.id}`;
       btnHTML.innerText = btn.text;

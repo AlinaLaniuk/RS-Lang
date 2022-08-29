@@ -22,11 +22,19 @@ class AutorizationController {
     const button = document.getElementById('sign-in') as HTMLInputElement;
     const email = document.getElementById('input-email') as HTMLInputElement;
     const password = document.getElementById('input-pass') as HTMLInputElement;
-    button.addEventListener('click', () => {
-      new AutorizationModel().login({
+    button.addEventListener('click', async () => {
+      const success = new AutorizationModel().login({
         email: email.value,
         password: password.value,
       });
+      if (await success) {
+        const navButtons = document.querySelector('div.nav > div') as HTMLDivElement;
+        const btnHTML = document.createElement('a');
+        btnHTML.href = '#stats';
+        btnHTML.innerText = 'Stats';
+        navButtons.append(btnHTML);
+        this.listenLogoutButton();
+      }
     });
   };
 
@@ -35,12 +43,15 @@ class AutorizationController {
     const name = document.getElementById('reg-name') as HTMLInputElement;
     const email = document.getElementById('reg-email') as HTMLInputElement;
     const password = document.getElementById('reg-pass') as HTMLInputElement;
-    button.addEventListener('click', () => {
-      new AutorizationModel().register({
+    button.addEventListener('click', async () => {
+      const success = new AutorizationModel().register({
         name: name.value,
         email: email.value,
         password: password.value,
       });
+      if (await success) {
+        this.listenLogoutButton();
+      }
     });
   };
 
@@ -48,6 +59,9 @@ class AutorizationController {
     const button = document.getElementById('login-button') as HTMLButtonElement;
     button.addEventListener('click', () => {
       new AutorizationModel().logout();
+      const stats = document.querySelector('div.nav > div > a:nth-child(4)');
+      stats?.remove();
+      this.listenLoginButton();
     });
   };
 }
