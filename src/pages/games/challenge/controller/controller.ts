@@ -19,9 +19,7 @@ class ChallengeController {
 
     const question = this.questions.next();
     if (question.hasNext) {
-      setTimeout(() => {
-        this.view.renderQuestionForm(question);
-      }, 1000);
+      this.view.renderQuestionForm(question);
     } else {
       this.gameOverHandler();
     }

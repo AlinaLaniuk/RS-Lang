@@ -30,10 +30,21 @@ class QuestionForm {
     }
   }
 
+  private questionImage = '';
+
   private onAnswer = (answer: boolean) => {
     this.playAnswer(answer);
-    this.callback(answer);
     this.disableButtons();
+    const audioButton = document.getElementById('challenge-question-button');
+    if (audioButton) {
+      const bgImg = new Image();
+      bgImg.onload = () => {
+        audioButton.style.opacity = '1';
+        audioButton.style.backgroundImage = `url('${bgImg.src}')`;
+        setTimeout(() => { this.callback(answer); }, 2000);
+      };
+      bgImg.src = API_URL + this.questionImage;
+    }
   };
 
   private answerButtons: HTMLButtonElement[] = [];
@@ -85,11 +96,14 @@ class QuestionForm {
   }
 
   render(question: IChallengeQuestion) {
+    this.questionImage = question.word.image;
+
     this.questionForm.tabIndex = -1;
     this.questionForm.innerHTML = '';
 
     const questionButton = document.createElement('div');
     questionButton.className = 'challenge-question-button';
+    questionButton.id = 'challenge-question-button';
 
     const questionAudio = document.createElement('audio');
     questionAudio.src = API_URL + question.word.audio;
