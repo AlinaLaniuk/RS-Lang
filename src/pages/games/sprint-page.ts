@@ -1,7 +1,7 @@
 import './games.css';
 import LevelHeader from './components/level-header';
 import LevelButton from './components/level-button';
-// import SprintController from '../../games/sprint/controller/controller';
+import SprintController from './sprint/controller/controller';
 import { PageIds } from '../../constants';
 
 class SprintPage {
@@ -16,8 +16,8 @@ class SprintPage {
   }
 
   private levelButtonHandler(level: number) {
-    // const controller = new SprintController();
-    // controller.launch(level);
+    const controller = new SprintController();
+    controller.launch(level);
   }
 
   render() {
