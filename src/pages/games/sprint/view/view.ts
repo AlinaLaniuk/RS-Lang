@@ -7,6 +7,7 @@ import {
   ISprintQuestion, IResult, IScore, Callback, QuestionCallback,
 } from '../../types/types';
 import ResultModal from './result-modal';
+import LoadModal from '../../components/load-modal';
 
 class View {
   constructor(private questionCallback: QuestionCallback, private gameOverCallback: Callback) { }
@@ -14,6 +15,8 @@ class View {
   private isStopped = false;
 
   private stopGame = () => { this.isStopped = true; };
+
+  private loadModal = new LoadModal();
 
   private modal = new SprintModal(this.stopGame);
 
@@ -27,6 +30,10 @@ class View {
 
   renderModal() {
     this.parent?.append(this.modal.render());
+  }
+
+  renderLoadModal() {
+    this.parent?.append(this.loadModal.render());
   }
 
   renderResults(result: IResult) {
@@ -61,6 +68,7 @@ class View {
     score: IScore,
     question: ISprintQuestion,
   ) {
+    this.remove(this.loadModal.id);
     this.renderModal();
     this.renderScorePanel(score);
     this.renderQuestionForm(question);

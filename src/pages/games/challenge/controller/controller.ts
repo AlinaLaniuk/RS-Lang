@@ -36,6 +36,7 @@ class ChallengeController {
   private view = new View(this.answerHandler, this.gameOverHandler);
 
   async launch(group: number, page?: number): Promise<void> {
+    this.view.renderLoadModal();
     const words = await getWords(group, page);
     this.questions.addWords(words, !page);
     this.view.render(this.questions.next());

@@ -41,6 +41,7 @@ class SprintController {
   private gameStat = new GameStat();
 
   async launch(group: number, page?: number): Promise<void> {
+    this.view.renderLoadModal();
     const words = await getWords(group, page);
     this.questions.addWords(words, !page);
     this.view.render(

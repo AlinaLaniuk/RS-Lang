@@ -7,6 +7,7 @@ import ChallengeTimer from '../../components/challenge-timer/challenge-timer';
 import { challengeGameLength } from '../../utils/constants';
 import ChallengeQuestionForm from '../../components/challenge-question-form';
 import ResultModal from './result-modal';
+import LoadModal from '../../components/load-modal';
 
 class View {
   constructor(private questionCallback: QuestionCallback, private gameOverCallback: Callback) { }
@@ -14,6 +15,8 @@ class View {
   private isStopped = false;
 
   private stopGame = () => { this.isStopped = true; };
+
+  private loadModal = new LoadModal();
 
   private modal = new ChallengeModal(this.stopGame);
 
@@ -25,6 +28,10 @@ class View {
 
   renderModal() {
     this.parent?.append(this.modal.render());
+  }
+
+  renderLoadModal() {
+    this.parent?.append(this.loadModal.render());
   }
 
   renderResults(result: IResult) {
@@ -57,6 +64,7 @@ class View {
   render(
     question: IChallengeQuestion,
   ) {
+    this.remove(this.loadModal.id);
     this.renderModal();
     this.renderTimer();
     this.renderQuestionForm(question);
