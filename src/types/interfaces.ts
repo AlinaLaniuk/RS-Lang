@@ -33,13 +33,13 @@ export interface IWord {
 
 export interface IWordParams {
   isLearned: boolean;
-  guessed: number;
-  mistakes: number;
+  guessed?: number;
+  mistakes?: number;
 }
 
 export interface IAgregation {
-  group: string;
-  page: string;
-  wordsPerPage: string;
-  filter?: string;
+  group?: string;
+  page?: string;
+  wordsPerPage?: string;
+  filter?: object;
 }

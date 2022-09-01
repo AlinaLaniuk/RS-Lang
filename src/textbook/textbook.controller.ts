@@ -14,8 +14,18 @@ function promisifyAudioPlaying(mediaElement: HTMLMediaElement):Promise<void> {
   });
 }
 
+function removeHideClass() {
+  const learnedCollection = document.querySelectorAll('.not-learned-yet');
+  const difficultCollection = document.querySelectorAll('.not-difficult-yet');
+  learnedCollection.forEach((learnedIndicator) => {
+    learnedIndicator.classList.remove('hide');
+  });
+  difficultCollection.forEach((difficultIndicator) => {
+    difficultIndicator.classList.remove('hide');
+  });
+}
 class TextbookController {
-  currentPage = 1;
+  currentPage = 0;
 
   currentLevel = 0;
 
@@ -25,7 +35,10 @@ class TextbookController {
       const eventTarget = event.target as HTMLElement;
       if (eventTarget.classList.contains('level-button')) {
         this.currentLevel = +(eventTarget.dataset.id as string);
-        this.currentPage = 1;
+        this.currentPage = 0;
+        if (this.currentLevel === 6) {
+          textbookModel.setMyWordsInfo();
+        }
         this.createWordCards(this.currentLevel, this.currentPage);
         textbookView.createPagination(this.currentPage);
       }
@@ -56,14 +69,56 @@ class TextbookController {
     wordCardWrapper.innerHTML = '';
     textbookModel.getWordsInfo(level, page)
       .then((wordsInfo) => {
-        wordsInfo.forEach((wordInfo: IWordInfo) => {
-          textbookView.setWordCard(wordInfo);
-          this.audioButtonListener();
-        });
+        if (wordsInfo.length > 1) {
+          wordsInfo.forEach((wordInfo: IWordInfo) => {
+            textbookView.setWordCard(wordInfo);
+          });
+          this.setAudioButtonListener();
+        } else {
+          wordsInfo[0].paginatedResults.forEach((wordInfo: IWordInfo) => {
+            textbookView.setWordCard(wordInfo);
+          });
+          removeHideClass();
+          this.setAudioButtonListener();
+          // eslint-disable-next-line no-underscore-dangle
+          this.setLearnedButtonListener();
+          this.setDifficultButtonListener();
+        }
       });
   }
 
-  audioButtonListener() {
+  sendWordInfoStylingButton(event: Event, isWordLearnedOrDifficult: string) {
+    const eventTarget = event.target as HTMLElement;
+    const card = eventTarget.closest('.word-card') as HTMLElement;
+    const wordId = card.dataset.identifier as string;
+    console.log(wordId);
+    if (isWordLearnedOrDifficult === 'learned') {
+      eventTarget.classList.add('learned');
+    } else if (isWordLearnedOrDifficult === 'difficult') {
+      eventTarget.classList.add('difficult');
+    }
+    textbookModel.createOrUpdateLearnedWord(wordId, isWordLearnedOrDifficult);
+  }
+
+  setLearnedButtonListener() {
+    const learnedButtonsCollection = document.querySelectorAll('.not-learned-yet');
+    learnedButtonsCollection.forEach((learnedButton) => {
+      learnedButton.addEventListener('click', (event) => {
+        this.sendWordInfoStylingButton(event, 'learned');
+      });
+    });
+  }
+
+  setDifficultButtonListener() {
+    const difficultButtonsCollection = document.querySelectorAll('.not-difficult-yet');
+    difficultButtonsCollection.forEach((difficultButton) => {
+      difficultButton.addEventListener('click', (event) => {
+        this.sendWordInfoStylingButton(event, 'difficult');
+      });
+    });
+  }
+
+  setAudioButtonListener() {
     const audioButtonCollection = document.querySelectorAll('.word-card_info_sound');
     audioButtonCollection.forEach((audioButton) => {
       audioButton.addEventListener('click', (event) => {
@@ -84,7 +139,7 @@ class TextbookController {
     textbookView.setPaginationPanel();
     textbookView.setWordCardWrapper();
     this.paginationListener();
-    this.createWordCards(0, this.currentPage);
+    this.createWordCards(this.currentLevel, this.currentPage);
   }
 }
 export default TextbookController;

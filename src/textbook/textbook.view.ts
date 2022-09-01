@@ -17,7 +17,8 @@ class TextbookView {
     const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
     wordCardWrapper.insertAdjacentHTML(
       'beforeend',
-      `<div class="frame word-card">
+      // eslint-disable-next-line no-underscore-dangle
+      `<div class="frame word-card" data-identifier=${data._id || data.id}>
            <div class="word-card-img-wrapper">
               <img class="word-card_img" src="https://team-171.herokuapp.com/${data.image}">
            </div>
@@ -28,6 +29,8 @@ class TextbookView {
                     <span>${data.transcription}</span>
                     <span>${data.wordTranslate}</span>
                  </div>
+                 <button class="learned-difficult-button not-learned-yet hide">Learned word</button>
+                 <button class="learned-difficult-button not-difficult-yet hide">Difficult word</button>
                  <div class="word-card_info_sound">
                     <img class="audio-button" src="./assets/sound.svg">
                     <audio class="audio" src="https://team-171.herokuapp.com/${data.audio}">
@@ -46,6 +49,7 @@ class TextbookView {
            </div>
         </div>`,
     );
+    console.log(data);
   }
 
   setLevelPanel() {
