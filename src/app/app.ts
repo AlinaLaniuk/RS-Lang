@@ -6,6 +6,7 @@ import { PageIds } from '../constants';
 import Nav from '../components/nav';
 import { IComponent } from '../types/interfaces';
 import SprintPage from '../pages/games/sprint-page';
+import ChallengePage from '../pages/games/challenge-page';
 
 class App {
   private static container: HTMLElement = document.body;
@@ -42,6 +43,10 @@ class App {
 
       case 'sprint':
         page = new SprintPage(id);
+        break;
+
+      case 'challenge':
+        page = new ChallengePage(id);
         break;
 
       default:
