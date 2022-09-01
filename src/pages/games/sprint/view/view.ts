@@ -6,7 +6,7 @@ import ScorePanel from '../../components/score-panel';
 import {
   ISprintQuestion, IResult, IScore, Callback, QuestionCallback,
 } from '../../types/types';
-import ResultModal from './result-modal';
+import ResultModal from '../../components/result-modal';
 import LoadModal from '../../components/load-modal';
 
 class View {

@@ -6,7 +6,7 @@ import {
 import ChallengeTimer from '../../components/challenge-timer/challenge-timer';
 import { challengeGameLength } from '../../utils/constants';
 import ChallengeQuestionForm from '../../components/challenge-question-form';
-import ResultModal from './result-modal';
+import ResultModal from '../../components/result-modal';
 import LoadModal from '../../components/load-modal';
 
 class View {

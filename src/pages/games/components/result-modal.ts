@@ -1,7 +1,7 @@
-import LevelHeader from '../../components/level-header';
-import CloseButton from '../../components/close-button';
-import ResultLine from '../../components/result-line';
-import { IResult } from '../../types/types';
+import LevelHeader from './level-header';
+import CloseButton from './close-button';
+import ResultLine from './result-line';
+import { IResult } from '../types/types';
 
 class ResultModal {
   private resultModal = document.createElement('div');
