@@ -1,7 +1,7 @@
 import './games.css';
 import LevelHeader from './components/level-header';
 import LevelButton from './components/level-button';
-// import ChallengeController from '../../games/challenge/controller/controller';
+import ChallengeController from './challenge/controller/controller';
 import { PageIds } from '../../constants';
 
 class ChallengePage {
@@ -16,8 +16,8 @@ class ChallengePage {
   }
 
   private levelButtonHandler(level: number) {
-    // const controller = new ChallengeController();
-    // controller.launch(level);
+    const controller = new ChallengeController();
+    controller.launch(level);
   }
 
   render() {
