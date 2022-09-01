@@ -3,6 +3,7 @@ import LevelHeader from './components/level-header';
 import LevelButton from './components/level-button';
 import ChallengeController from './challenge/controller/controller';
 import { PageIds } from '../../constants';
+import { getRange } from './utils/functions';
 
 class ChallengePage {
   private page: HTMLDivElement;
@@ -23,7 +24,7 @@ class ChallengePage {
   render() {
     const buttons = document.createElement('div');
     buttons.className = 'buttons-container';
-    const buttonsArray = [...Array(6).keys()].map((index) => {
+    const buttonsArray = getRange(6).map((index) => {
       const btn = new LevelButton(index, () => this.levelButtonHandler(index));
       return btn.render();
     });
