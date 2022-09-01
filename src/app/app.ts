@@ -1,6 +1,6 @@
 import MainPage from '../pages/main';
 import TextbookPage from '../pages/textbook';
-import GamesPage from '../pages/games';
+import GamesPage from '../pages/games/games';
 import StatsPage from '../pages/stats';
 import { PageIds } from '../constants';
 import Nav from '../components/nav';
