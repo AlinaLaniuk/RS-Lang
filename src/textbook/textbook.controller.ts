@@ -1,4 +1,4 @@
-import IWordInfo from '../types/textbook.types';
+import { IWordInfo } from '../types/interfaces';
 import TextbookModel from './textbook.model';
 import TextbookView from './textbook.view';
 
@@ -25,21 +25,22 @@ function removeHideClass() {
   });
 }
 class TextbookController {
-  currentPage = 0;
+  currentPage = 1;
 
   currentLevel = 0;
 
   levelPanelListener() {
     const levelPanel = document.querySelector('.level-panel') as HTMLElement;
-    levelPanel.addEventListener('click', (event) => {
+    levelPanel.addEventListener('click', async (event) => {
       const eventTarget = event.target as HTMLElement;
       if (eventTarget.classList.contains('level-button')) {
         this.currentLevel = +(eventTarget.dataset.id as string);
-        this.currentPage = 0;
-        if (this.currentLevel === 6) {
-          textbookModel.setMyWordsInfo();
+        this.currentPage = 1;
+        if (eventTarget.classList.contains('my-word')) {
+          this.createWordCards(this.currentLevel, this.currentPage, true);
+        } else {
+          this.createWordCards(this.currentLevel, this.currentPage);
         }
-        this.createWordCards(this.currentLevel, this.currentPage);
         textbookView.createPagination(this.currentPage);
       }
     });
@@ -64,10 +65,10 @@ class TextbookController {
     });
   }
 
-  createWordCards(level: number, page: number) {
+  createWordCards(level: number, page: number, myWord?: boolean) {
     const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
     wordCardWrapper.innerHTML = '';
-    textbookModel.getWordsInfo(level, page)
+    textbookModel.getWordsInfo(level, page - 1)
       .then((wordsInfo) => {
         if (wordsInfo.length > 1) {
           wordsInfo.forEach((wordInfo: IWordInfo) => {
@@ -83,6 +84,20 @@ class TextbookController {
           // eslint-disable-next-line no-underscore-dangle
           this.setLearnedButtonListener();
           this.setDifficultButtonListener();
+          if (myWord) {
+            const wordCardInfoBlockCollection = document.querySelectorAll('.word-card_info_word');
+            wordCardInfoBlockCollection.forEach((wordCardInfoBlock) => {
+              wordCardInfoBlock.classList.add('my-word');
+            });
+            const learnedButtonCollection = document.querySelectorAll('.not-learned-yet');
+            for (let i = 0; i < learnedButtonCollection.length; i += 1) {
+              learnedButtonCollection[i].innerHTML = 'Learned and delete';
+            }
+            const difficultButtonCollection = document.querySelectorAll('.not-difficult-yet');
+            for (let i = 0; i < difficultButtonCollection.length; i += 1) {
+              difficultButtonCollection[i].classList.add('hide');
+            }
+          }
         }
       });
   }
@@ -97,14 +112,26 @@ class TextbookController {
     } else if (isWordLearnedOrDifficult === 'difficult') {
       eventTarget.classList.add('difficult');
     }
-    textbookModel.createOrUpdateLearnedWord(wordId, isWordLearnedOrDifficult);
+    return textbookModel.createOrUpdateLearnedWord(wordId, isWordLearnedOrDifficult);
   }
 
   setLearnedButtonListener() {
-    const learnedButtonsCollection = document.querySelectorAll('.not-learned-yet');
-    learnedButtonsCollection.forEach((learnedButton) => {
+    const notLearnedButtonsCollection = document.querySelectorAll('.not-learned-yet');
+    notLearnedButtonsCollection.forEach((learnedButton) => {
       learnedButton.addEventListener('click', (event) => {
-        this.sendWordInfoStylingButton(event, 'learned');
+        const eventTarget = event.target as HTMLElement;
+        if (eventTarget.innerHTML === 'Learned and delete') {
+          this.sendWordInfoStylingButton(event, 'learnedOnMyWordPage').then(() => {
+            this.createWordCards(this.currentLevel, this.currentPage, true);
+          });
+        } else {
+          this.sendWordInfoStylingButton(event, 'learned');
+        }
+        const learnedButtonCollection = document.querySelectorAll('.learned');
+        if (learnedButtonCollection.length === 20) {
+          const allWordsLearnedMark = document.querySelector('.all-words-learned');
+          allWordsLearnedMark?.classList.remove('hide');
+        }
       });
     });
   }

@@ -1,5 +1,5 @@
 import './textbook.style.css';
-import IWordInfo from '../types/textbook.types';
+import { IWordInfo } from '../types/interfaces';
 
 class TextbookView {
   totalPage = 30;
@@ -14,7 +14,26 @@ class TextbookView {
   }
 
   setWordCard(data: IWordInfo) {
+    console.log(data.userWord);
     const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
+    const difficultClass = () => {
+      if (data.userWord?.difficulty === 'hard') {
+        return 'difficult';
+      }
+      return '';
+    };
+    const learnedClass = () => {
+      if (data.userWord?.optional.isLearned === true) {
+        return 'learned';
+      }
+      return '';
+    };
+    const levelColor = () => {
+      if (data.group <= 6) {
+        return data.group;
+      }
+      return '';
+    };
     wordCardWrapper.insertAdjacentHTML(
       'beforeend',
       // eslint-disable-next-line no-underscore-dangle
@@ -24,13 +43,13 @@ class TextbookView {
            </div>
            <div class="word-card_info">
               <div class="word-card_info_word-and-sound">
-                 <div class="word-card_info_word">
+                 <div class="word-card_info_word level-${levelColor()}">
                     <span>${data.word}</span>
                     <span>${data.transcription}</span>
                     <span>${data.wordTranslate}</span>
                  </div>
-                 <button class="learned-difficult-button not-learned-yet hide">Learned word</button>
-                 <button class="learned-difficult-button not-difficult-yet hide">Difficult word</button>
+                 <button class="learned-difficult-button not-learned-yet ${learnedClass()} hide" id="learned-button">Learned word</button>
+                 <button class="learned-difficult-button not-difficult-yet ${difficultClass()} hide">Difficult word</button>
                  <div class="word-card_info_sound">
                     <img class="audio-button" src="./assets/sound.svg">
                     <audio class="audio" src="https://team-171.herokuapp.com/${data.audio}">
@@ -43,30 +62,36 @@ class TextbookView {
                  <span>${data.textMeaningTranslate}</span>
               </div>
               <div class="word-card_info_example">
-              <span>${data.textExample}</span>
-              <span>${data.textExampleTranslate}</span>
+                 <span>${data.textExample}</span>
+                 <span>${data.textExampleTranslate}</span>
+              </div>
+              <div class="stat-info">
+                 <span>Guessed: </span>
+                 <span>Mistakes: </span>
               </div>
            </div>
         </div>`,
     );
-    console.log(data);
   }
 
   setLevelPanel() {
     document.body.insertAdjacentHTML(
       'beforeend',
       `<div class="level-panel">
-           <button data-id="0" class="level-button level-1">Level 1</button>
-           <button data-id="1" class="level-button level-2">Level 2</button>
-           <button data-id="2" class="level-button level-3">Level 3</button>
-           <button data-id="3" class="level-button level-4">Level 4</button>
-           <button data-id="4" class="level-button level-5">Level 5</button>
-           <button data-id="5" class="level-button level-6">Level 6</button>
-           <button data-id="6" class="level-button my-words">My words</button>
+           <button data-id="0" class="level-button level-0">Level 1</button>
+           <button data-id="1" class="level-button level-1">Level 2</button>
+           <button data-id="2" class="level-button level-2">Level 3</button>
+           <button data-id="3" class="level-button level-3">Level 4</button>
+           <button data-id="4" class="level-button level-4">Level 5</button>
+           <button data-id="5" class="level-button level-5">Level 6</button>
+           <button data-id="6" class="level-button my-word">My words</button>
        </div>
-       <div class="frame level-page-info">
-           <span>Level 1</span>
-           <span>Page 1</span>
+       <div class="level-page-info">
+          <div class="level-page frame">
+              <span>Level 1</span>
+              <span>Page 1</span>
+          </div>   
+           <div class="all-words-learned hide">Great work! This page is absolutely done!</div>
        </div>`,
     );
   }

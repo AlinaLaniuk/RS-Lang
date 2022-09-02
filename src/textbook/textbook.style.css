@@ -12,34 +12,40 @@
     width: 8%;
     height: 30px;
 }
-.level-1{
+.level-0{
     background-color: #F8E6A4;
 }
-.level-2{
+.level-1{
     background-color: #FBDE5D;
 }
-.level-3{
+.level-2{
     background-color: #CFC4FC;
 }
-.level-4{
+.level-3{
     background-color: #BDAEF8;
 }
-.level-5{
+.level-4{
     background-color: #9F8DF3;
 }
-.level-6{
+.level-5{
     background-color: #7C6BF7;
 }
-.my-words{
+.my-word{
     background-color:rgb(132, 206, 208);
 }
 .level-page-info{
-    width: 80px;
+    width: 100%;
     height: 40px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     text-align: center;
     justify-content: center;
+}
+.level-page{
+    width: 80px;
+}
+.all-words-learned{
+    background-color: #7AA999;
 }
 .word-card{
     width: 80%;
@@ -65,7 +71,6 @@
 }
 .word-card_info_word{
     width: 20%;
-    background-color:#F8E6A4;
     margin-left: 3%;
 }
 .word-card_info_sound{
@@ -114,7 +119,7 @@
 }
 .learned-difficult-button{
     background-color: white;
-    width: 80px;
+    width: 100px;
     height: 40px;
     border: 3px solid;
 }

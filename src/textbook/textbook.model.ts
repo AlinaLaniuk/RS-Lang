@@ -16,6 +16,10 @@ class TextbookModel {
     const userInfo = getAutentificationInfo();
     const wordsInfoForNotAutorizated = await (await fetch(`${API_URL}words?group=${group}&page=${page}`)).json();
     console.log(`${API_URL}words?group=${group}&page=${page}`);
+    if (userInfo && isAuthorized && group === 6) {
+      const wordsInfoForMyWordPage = await agregationAPI.getAllAgregations({ wordsPerPage: '20', filter: JSON.stringify({ $and: [{ 'userWord.difficulty': 'hard', 'userWord.optional.isLearned': false }] }) });
+      return wordsInfoForMyWordPage;
+    }
     if (userInfo && isAuthorized) {
       const wordsInfoForAutorizated = await agregationAPI.getAllAgregations({ group: `${group}`, page: `${page}`, wordsPerPage: '20' });
       console.log(wordsInfoForAutorizated);
@@ -47,30 +51,23 @@ class TextbookModel {
               },
             };
           }
-          wordsApi.createUserWord(wordId, getParams);
-        } else {
-          const updateParam = {
-            difficulty: (response as IWord).difficulty,
-            optional: { ...(response as IWord).optional, isLearned: true },
-          };
-          if (isWordLearnedOrDifficult === 'learned') {
-            updateParam.optional.isLearned = true;
-          } else {
-            updateParam.difficulty = 'hard';
-          }
-          wordsApi.updateUserWord(wordId, updateParam);
+          return wordsApi.createUserWord(wordId, getParams);
         }
+        const updateParam = {
+          difficulty: (response as IWord).difficulty,
+          optional: { ...(response as IWord).optional, isLearned: true },
+        };
+        if (isWordLearnedOrDifficult === 'learned') {
+          updateParam.difficulty = 'easy';
+          updateParam.optional.isLearned = true;
+        } else if (isWordLearnedOrDifficult === 'learnedOnMyWordPage') {
+          updateParam.difficulty = 'easy';
+        } else {
+          updateParam.difficulty = 'hard';
+          updateParam.optional.isLearned = false;
+        }
+        return wordsApi.updateUserWord(wordId, updateParam);
       });
-  }
-
-  async setMyWordsInfo() {
-    const userInfo = getAutentificationInfo();
-    let wordsInfoForMyWordPage;
-    if (userInfo && isAuthorized) {
-      wordsInfoForMyWordPage = await agregationAPI.getAllAgregations({ wordsPerPage: '20', filter: { 'userWord.difficulty': 'hard' } });
-      console.log(wordsInfoForMyWordPage);
-    }
-    return wordsInfoForMyWordPage;
   }
 }
 
