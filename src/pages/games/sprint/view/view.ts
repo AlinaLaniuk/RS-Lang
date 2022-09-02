@@ -59,6 +59,10 @@ class View {
   }
 
   gameOver(result: IResult) {
+    const gameOverSound = document.createElement('audio');
+    gameOverSound.src = '../../../../assets/sounds/winner.mp3';
+    gameOverSound.preload = 'auto';
+    gameOverSound.autoplay = true;
     this.remove(this.modal.id);
     if (!this.isStopped) this.renderResults(result);
     this.timer.stop();
