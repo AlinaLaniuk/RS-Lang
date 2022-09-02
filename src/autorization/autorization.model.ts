@@ -32,12 +32,16 @@ class AutorizationModel {
       wrapper.lastChild?.remove();
     }
     let message = '';
+    console.log(apiAnswer);
     switch (apiAnswer) {
       case '"email" must be a valid email':
         message = 'Email must be a valid';
         break;
       case '"password" length must be at least 8 characters long':
         message = 'Password length must be at least 8 characters long';
+        break;
+      case 'user with this e-mail exists':
+        message = 'User with this e-mail exists';
         break;
       default:
         message = 'Name, Email and Password must not be empty';
@@ -92,6 +96,7 @@ class AutorizationModel {
       email: user.email,
       password: user.password,
     });
+    console.log(await message);
     if ((await message) !== 'Ok') {
       this.showRegistrationError(await message);
       return true;
