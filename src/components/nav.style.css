@@ -1,0 +1,24 @@
+.nav {
+    height: 100vh;
+    width: 100px;
+    z-index: 1;
+    position: fixed;
+    background-color: #6E6C79;
+}
+
+.nav-buttons-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.nav-buttons-wrapper a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-buttons-wrapper a img {
+    width: 30px;
+    order: -1;
+}

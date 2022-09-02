@@ -18,6 +18,10 @@ class StatsPage implements IComponent {
   }
 
   render() {
+    const autorizationBtn = document.querySelector('.button-wrapper');
+    if (autorizationBtn) {
+      autorizationBtn.remove();
+    }
     this.getStats();
     return this.page;
   }
@@ -51,7 +55,7 @@ class StatsPage implements IComponent {
       <h2>${name}</h2>
       <div class='today-stats-in-game'>
         <div class='new-words'>
-          <span>${stats ? JSON.parse(stats.newWords).length : 0}</span><span> new words</span>
+          <span>${stats ? stats.newWords.length : 0}</span><span> new words</span>
         </div>
         <div class='best-result'>
           <span>${stats ? stats.longestSeries : 0}</span><span> best series</span>
@@ -65,8 +69,8 @@ class StatsPage implements IComponent {
   }
 
   private todayStatBlock(todayData?: ITotalLearnedStat, sprint?: IGameStat, challenge?: IGameStat) {
-    const sprintWords = sprint ? JSON.parse(sprint.newWords).length : 0;
-    const challengeWords = challenge ? JSON.parse(challenge.newWords.replace(/'/g, '"')).length : 0;
+    const sprintWords = sprint ? sprint.newWords.length : 0;
+    const challengeWords = challenge ? challenge.newWords.replace(/'/g, '"').length : 0;
     let procent;
     if (sprint && challenge) {
       procent = sprint.percentCorrectAnswers + challenge.percentCorrectAnswers / 2;
@@ -107,12 +111,11 @@ class StatsPage implements IComponent {
       lastDates.unshift(new Date().setDate(new Date().getDate() - i));
     }
     const strDates:Array<string> = lastDates.map((el) => new Date(el).toISOString().split('T')[0]);
-
     const defaultData:Array<number> = Array(10).fill(0);
     Object.values(stats.optional.sprint).forEach((el) => {
       const { day, newWords } = el;
       if (strDates.includes(day)) {
-        defaultData.splice(strDates.indexOf(day), 1, JSON.parse(newWords.replace(/'/g, '"')).length);
+        defaultData.splice(strDates.indexOf(day), 1, JSON.stringify(newWords).replace(/'/g, '"').length);
       }
     });
 
@@ -128,7 +131,6 @@ class StatsPage implements IComponent {
     const totalLearned:Array<number> = Array(10).fill(0);
     Object.values(stats.optional.totalWords).forEach((el) => {
       const { day, learned } = el;
-      console.log(stats.optional);
       const arr = learned.replace(/'/g, '"');
       if (strDates.includes(day)) {
         totalLearned.splice(strDates.indexOf(day), 1, JSON.parse(arr).length);

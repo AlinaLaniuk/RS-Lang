@@ -32,6 +32,9 @@ class AutorizationController {
         const btnHTML = document.createElement('a');
         btnHTML.href = '#stats';
         btnHTML.innerText = 'Stats';
+        const img = document.createElement('img');
+        img.src = '/assets/img/statistics.svg';
+        btnHTML.appendChild(img);
         navButtons.append(btnHTML);
         this.listenLogoutButton();
       }
