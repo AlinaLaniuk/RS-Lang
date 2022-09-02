@@ -13,57 +13,56 @@ class TextbookView {
     );
   }
 
-  setWordCard(data: IWordInfo) {
-    console.log(data.userWord);
+  setWordCard(wordData: IWordInfo) {
     const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
     const difficultClass = () => {
-      if (data.userWord?.difficulty === 'hard') {
+      if (wordData.userWord?.difficulty === 'hard') {
         return 'difficult';
       }
       return '';
     };
     const learnedClass = () => {
-      if (data.userWord?.optional.isLearned === true) {
+      if (wordData.userWord?.optional.isLearned === true) {
         return 'learned';
       }
       return '';
     };
     const levelColor = () => {
-      if (data.group <= 6) {
-        return data.group;
+      if (wordData.group <= 6) {
+        return wordData.group;
       }
       return '';
     };
     wordCardWrapper.insertAdjacentHTML(
       'beforeend',
       // eslint-disable-next-line no-underscore-dangle
-      `<div class="frame word-card" data-identifier=${data._id || data.id}>
+      `<div class="frame word-card" data-identifier=${wordData._id || wordData.id}>
            <div class="word-card-img-wrapper">
-              <img class="word-card_img" src="https://team-171.herokuapp.com/${data.image}">
+              <img class="word-card_img" src="https://team-171.herokuapp.com/${wordData.image}">
            </div>
            <div class="word-card_info">
               <div class="word-card_info_word-and-sound">
                  <div class="word-card_info_word level-${levelColor()}">
-                    <span>${data.word}</span>
-                    <span>${data.transcription}</span>
-                    <span>${data.wordTranslate}</span>
+                    <span>${wordData.word}</span>
+                    <span>${wordData.transcription}</span>
+                    <span>${wordData.wordTranslate}</span>
                  </div>
                  <button class="learned-difficult-button not-learned-yet ${learnedClass()} hide" id="learned-button">Learned word</button>
                  <button class="learned-difficult-button not-difficult-yet ${difficultClass()} hide">Difficult word</button>
                  <div class="word-card_info_sound">
                     <img class="audio-button" src="./assets/sound.svg">
-                    <audio class="audio" src="https://team-171.herokuapp.com/${data.audio}">
-                    <audio class="audio" src="https://team-171.herokuapp.com/${data.audioMeaning}">
-                    <audio class="audio" src="https://team-171.herokuapp.com/${data.audioExample}">
+                    <audio class="audio" src="https://team-171.herokuapp.com/${wordData.audio}">
+                    <audio class="audio" src="https://team-171.herokuapp.com/${wordData.audioMeaning}">
+                    <audio class="audio" src="https://team-171.herokuapp.com/${wordData.audioExample}">
                  </div>
               </div>
               <div class="word-card_info_meaning">
-                 <span>${data.textMeaning}</span>
-                 <span>${data.textMeaningTranslate}</span>
+                 <span>${wordData.textMeaning}</span>
+                 <span>${wordData.textMeaningTranslate}</span>
               </div>
               <div class="word-card_info_example">
-                 <span>${data.textExample}</span>
-                 <span>${data.textExampleTranslate}</span>
+                 <span>${wordData.textExample}</span>
+                 <span>${wordData.textExampleTranslate}</span>
               </div>
               <div class="stat-info">
                  <span>Guessed: </span>
