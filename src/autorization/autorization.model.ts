@@ -32,7 +32,6 @@ class AutorizationModel {
       wrapper.lastChild?.remove();
     }
     let message = '';
-    console.log(apiAnswer);
     switch (apiAnswer) {
       case '"email" must be a valid email':
         message = 'Email must be a valid';
@@ -96,9 +95,9 @@ class AutorizationModel {
       email: user.email,
       password: user.password,
     });
-    console.log(await message);
-    if ((await message) !== 'Ok') {
-      this.showRegistrationError(await message);
+    const status = await message;
+    if (status !== 'Ok') {
+      this.showRegistrationError(status);
       return true;
     }
     return false;

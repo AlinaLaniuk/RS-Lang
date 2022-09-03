@@ -1,4 +1,5 @@
 import { Chart, registerables } from 'chart.js';
+import Footer from '../components/footer';
 import { PageIds } from '../constants';
 import StatsAPI from '../services/stats';
 import {
@@ -11,6 +12,8 @@ import './stats.style.css';
 
 class StatsPage implements IComponent {
   private page: HTMLDivElement;
+
+  private footer = new Footer();
 
   constructor(id: PageIds) {
     this.page = document.createElement('div');
@@ -47,6 +50,7 @@ class StatsPage implements IComponent {
     games.innerHTML = todayBlock + sprintBlock + challengeBlock;
     this.page.appendChild(games);
     this.renderCharts(response);
+    this.page.appendChild(this.footer.render());
   }
 
   private gameBlock(name: string, stats?: IGameStat) {

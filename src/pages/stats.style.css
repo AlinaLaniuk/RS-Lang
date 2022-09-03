@@ -1,6 +1,6 @@
 #stats {
     background-color: #BDAEF8;
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -40,5 +40,11 @@ h2 {
 canvas {
     max-width: 400px;
     max-height: 400px;
+    background-color: #fff;
+}
+
+.footer {
+    width: calc(100% - 100px);
+    padding-left: 100px;
     background-color: #fff;
 }

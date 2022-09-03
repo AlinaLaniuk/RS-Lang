@@ -26,7 +26,6 @@ class AutorizationAPI extends API {
     });
 
     let result = 'Ok';
-    console.log(rawResponse);
     if (rawResponse.status === 200) {
       this.login({ email: user.email, password: user.password });
     } else if (rawResponse.status === 417) {
