@@ -39,6 +39,9 @@ class AutorizationModel {
       case '"password" length must be at least 8 characters long':
         message = 'Password length must be at least 8 characters long';
         break;
+      case 'user with this e-mail exists':
+        message = 'User with this e-mail exists';
+        break;
       default:
         message = 'Name, Email and Password must not be empty';
         break;
@@ -92,8 +95,9 @@ class AutorizationModel {
       email: user.email,
       password: user.password,
     });
-    if ((await message) !== 'Ok') {
-      this.showRegistrationError(await message);
+    const status = await message;
+    if (status !== 'Ok') {
+      this.showRegistrationError(status);
       return true;
     }
     return false;

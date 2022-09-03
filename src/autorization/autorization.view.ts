@@ -29,8 +29,9 @@ class AutorizationView {
 
   public loginButton = (isLogedIn: boolean) => {
     const header = document.querySelector('header') as HTMLHeadingElement;
-    if (document.getElementById('login-button') as HTMLButtonElement) {
-      (document.getElementById('login-button') as HTMLButtonElement).remove();
+    const autorizationBtn = document.querySelector('.button-wrapper') as HTMLDivElement;
+    if (autorizationBtn) {
+      autorizationBtn.remove();
     }
     const html = `
       <button
@@ -48,6 +49,7 @@ class AutorizationView {
         </span>
       </button>`;
     const root = document.createElement('div');
+    root.className = 'button-wrapper';
     root.innerHTML = html;
     header.appendChild(root);
   };
