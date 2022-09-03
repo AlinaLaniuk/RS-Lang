@@ -1,6 +1,6 @@
 import { getWords } from '../../services/words-api';
 import ChallengeQuestions from '../model/challenge-questions';
-import GameStat from '../model/game-stat';
+import GameStat from '../../utils/game-stat';
 import View from '../view/view';
 
 class ChallengeController {
@@ -8,7 +8,7 @@ class ChallengeController {
 
   private questions = new ChallengeQuestions();
 
-  private gameStats = new GameStat();
+  private gameStats = new GameStat('audioChallenge');
 
   private answerHandler = (answer: boolean) => {
     if (answer) {

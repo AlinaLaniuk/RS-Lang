@@ -1,6 +1,6 @@
 import { getWords } from '../../services/words-api';
 import { IScore } from '../../types/types';
-import GameStat from '../model/game-stat';
+import GameStat from '../../utils/game-stat';
 import Questions from '../model/questions';
 import View from '../view/view';
 
@@ -17,13 +17,13 @@ class SprintController {
     this.view.renderScorePanel(this.score);
     const question = this.questions.next();
 
-    if (question.hasNext) {
-      setTimeout(() => {
+    setTimeout(() => {
+      if (question.hasNext) {
         this.view.renderQuestionForm(question);
-      }, 1400);
-    } else {
-      this.gameOverHandler();
-    }
+      } else {
+        this.gameOverHandler();
+      }
+    }, 2000);
   };
 
   private gameOverHandler = async () => {
@@ -38,7 +38,7 @@ class SprintController {
 
   private questions = new Questions();
 
-  private gameStat = new GameStat();
+  private gameStat = new GameStat('sprint');
 
   async launch(group: number, page?: number): Promise<void> {
     this.view.renderLoadModal();
