@@ -15,14 +15,12 @@ class TextbookModel {
   async getWordsInfo(group: number, page: number) {
     const userInfo = getAutentificationInfo();
     const wordsInfoForNotAutorizated = await (await fetch(`${API_URL}words?group=${group}&page=${page}`)).json();
-    console.log(`${API_URL}words?group=${group}&page=${page}`);
     if (userInfo && isAuthorized && group === 6) {
       const wordsInfoForMyWordPage = await agregationAPI.getAllAgregations({ wordsPerPage: '20', filter: JSON.stringify({ $and: [{ 'userWord.difficulty': 'hard', 'userWord.optional.isLearned': false }] }) });
       return wordsInfoForMyWordPage;
     }
     if (userInfo && isAuthorized) {
       const wordsInfoForAutorizated = await agregationAPI.getAllAgregations({ group: `${group}`, page: `${page}`, wordsPerPage: '20' });
-      console.log(wordsInfoForAutorizated);
       return wordsInfoForAutorizated;
     }
     return wordsInfoForNotAutorizated;

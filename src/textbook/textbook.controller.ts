@@ -106,7 +106,6 @@ class TextbookController {
     const eventTarget = event.target as HTMLElement;
     const card = eventTarget.closest('.word-card') as HTMLElement;
     const wordId = card.dataset.identifier as string;
-    console.log(wordId);
     if (isWordLearnedOrDifficult === 'learned') {
       eventTarget.classList.add('learned');
     } else if (isWordLearnedOrDifficult === 'difficult') {
