@@ -2,9 +2,11 @@ import { IAgregation } from '../types/interfaces';
 import API from './api';
 
 class AgregationAPI extends API {
-  public getAllAgregations = async (): Promise<Response> => {
+  public getAllAgregations = async (params: IAgregation): Promise<Response> => {
     const { userId, token } = JSON.parse(localStorage.getItem('autentificationInfo') as string);
-    const rawResponse = await fetch(`${this.url}users/${userId}/words`, {
+    const result = Object.entries(params).map((el) => ({ key: el[0], value: el[1] }));
+    const query = this.generateQuery(result);
+    const rawResponse = await fetch(`${this.url}users/${userId}/aggregatedWords${query}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -12,14 +14,13 @@ class AgregationAPI extends API {
         'Content-Type': 'application/json',
       },
     });
+    console.log(query);
     return rawResponse.json();
   };
 
-  public getOneAgregation = async (wordsId: string, params: IAgregation): Promise<Response> => {
-    const result = Object.entries(params).map((el) => ({ key: el[0], value: el[1] }));
-    const query = this.generateQuery(result);
+  public getOneAgregation = async (wordsId: string): Promise<Response> => {
     const { userId, token } = JSON.parse(localStorage.getItem('autentificationInfo') as string);
-    const rawResponse = await fetch(`${this.url}users/${userId}/aggregatedWords/${wordsId}${query}`, {
+    const rawResponse = await fetch(`${this.url}users/${userId}/aggregatedWords/${wordsId}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
