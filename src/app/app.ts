@@ -1,10 +1,12 @@
 import MainPage from '../pages/main';
 import TextbookPage from '../pages/textbook';
-import GamesPage from '../pages/games';
+import GamesPage from '../pages/games/games';
 import StatsPage from '../pages/stats';
 import { PageIds } from '../constants';
 import Nav from '../components/nav';
 import { IComponent } from '../types/interfaces';
+import SprintPage from '../pages/games/sprint-page';
+import ChallengePage from '../pages/games/challenge-page';
 
 class App {
   private static container: HTMLElement = document.body;
@@ -37,6 +39,14 @@ class App {
 
       case 'stats':
         page = new StatsPage(id);
+        break;
+
+      case 'sprint':
+        page = new SprintPage(id);
+        break;
+
+      case 'challenge':
+        page = new ChallengePage(id);
         break;
 
       default:

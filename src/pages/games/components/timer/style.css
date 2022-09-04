@@ -1,0 +1,31 @@
+.timer {
+  width: 80px;
+  position: relative;
+}
+.timer .timer__circle {
+  fill: none;
+  stroke: none;
+}
+.timer .timer__path-elapsed {
+  stroke-width: 7px;
+  stroke: #F8E6A4;
+}
+.timer .timer-label {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  top: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  font-family: sans-serif;
+  color: #fff;
+}
+.timer .timer__path-remaining {
+  stroke-width: 7px;
+  stroke-linecap: round;
+  transform: rotate(90deg);
+  transform-origin: center;
+  transition: all linear 1s;
+}
