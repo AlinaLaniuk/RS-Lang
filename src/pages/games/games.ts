@@ -1,3 +1,5 @@
+import AutorizationController from '../../autorization/autorization.controller';
+import AutorizationModel from '../../autorization/autorization.model';
 import { PageIds } from '../../constants';
 import './games.css';
 
@@ -10,6 +12,12 @@ class GamesPage {
   }
 
   render() {
+    const autorized = new AutorizationModel().isLogedIn();
+    if (autorized) {
+      new AutorizationController().listenLogoutButton();
+    } else {
+      new AutorizationController().listenLoginButton();
+    }
     const sprint = document.createElement('a');
     sprint.id = 'sprint';
     sprint.className = 'game-button';
