@@ -1,8 +1,10 @@
-import { IStats, Word } from '../types/types';
-import { IWord as IUserWord } from '../../../types/interfaces';
+import { Word } from '../types/types';
+import { IGameStat, IStats, IWord as IUserWord } from '../../../types/interfaces';
 import UserWords from '../services/user-words-api';
 import AutorizationModel from '../../../autorization/autorization.model';
 import WordsAPI from '../../../services/words';
+import StatsAPI from '../services/stats-api';
+import { initStats } from './constants';
 
 class GameStat {
   private rightAnswers: Word[] = [];
@@ -21,10 +23,77 @@ class GameStat {
 
   private userWords: IUserWord[] = [];
 
-  private newWords = 0;
+  private learnedWords: string[] = [];
 
   constructor(private game: 'sprint' | 'audioChallenge') {
+    console.log(this.game);
     this.loadUserWords();
+  }
+
+  private stats: IStats = initStats;
+
+  async sendStats(): Promise<void> {
+    if (this.auth.isLogedIn()) {
+      await this.getStats();
+      console.log(this.stats);
+      const sprintStats = this.stats.optional.sprint;
+      const challengeStats = this.stats.optional.audioChallenge;
+      const currentDate = new Date().toISOString().split('T')[0];
+      const gameStats = this.game === 'sprint' ? sprintStats : challengeStats;
+      const lastIndex = Object.keys(gameStats)[Object.keys(gameStats).length - 1];
+
+      const current: IGameStat = {
+        day: currentDate,
+        newWords: JSON.stringify(this.userWordsIds),
+        percentCorrectAnswers: this.rightPercent,
+        longestSeries: this.longestSeries,
+      };
+
+      const defaultData = new Map(Object.entries(gameStats));
+
+      if (defaultData.get(lastIndex)?.day === currentDate) {
+        const old = defaultData.get(lastIndex) as IGameStat;
+        const { longestSeries } = old;
+        const percent = (old.percentCorrectAnswers + current.percentCorrectAnswers) / 2;
+        const series = longestSeries > current.longestSeries
+          ? longestSeries
+          : current.longestSeries;
+
+        const newDay = {
+          day: old.day,
+          newWords: JSON.parse(old.newWords || '[]').concat(current.newWords),
+          percentCorrectAnswers: percent,
+          longestSeries: series,
+        };
+
+        defaultData.delete(lastIndex);
+        defaultData.set(lastIndex, newDay);
+      } else {
+        defaultData.set((Number(lastIndex) + 1).toString(), current);
+      }
+
+      const newStat: IStats = {
+        learnedWords: this.stats.learnedWords + this.learnedWords.length,
+        optional: {
+          sprint: this.game === 'sprint'
+            ? Object.fromEntries(defaultData)
+            : this.stats.optional.sprint,
+          audioChallenge: this.game === 'audioChallenge'
+            ? Object.fromEntries(defaultData)
+            : this.stats.optional.audioChallenge,
+
+          totalWords: this.stats.optional.totalWords,
+        },
+      };
+
+      console.log(newStat);
+
+      await StatsAPI.setStats(newStat);
+    }
+  }
+
+  private async getStats(): Promise<void> {
+    this.stats = await StatsAPI.getStats();
   }
 
   private async loadUserWords(): Promise<void> {
@@ -55,6 +124,8 @@ class GameStat {
     if (userWord) {
       const isHardLearned = userWord.optional.guessed - userWord.optional.mistakes > 3;
       const isLearned = userWord.optional.guessed - userWord.optional.mistakes > 1;
+
+      if ((isHardLearned || isLearned) && answer) this.learnedWords.push(word.id);
 
       this.wordsApi.updateUserWord(
         word.id,
@@ -87,13 +158,6 @@ class GameStat {
     return Math.round((this.rightAnswers.length / count) * 100);
   }
 
-  get stats(): IStats {
-    return {
-      learnedWords: this.rightAnswers.length,
-      optional: {},
-    };
-  }
-
   addAnswer(word: Word, result: boolean): void {
     if (result) {
       this.rightAnswers.push(word);
@@ -108,7 +172,6 @@ class GameStat {
 
     if (this.auth.isLogedIn()) {
       if (!this.userWordsIds.includes(word.id)) {
-        this.newWords += 1;
         this.addNewUserWord(word, result);
       } else {
         this.updateUserWord(word, result);

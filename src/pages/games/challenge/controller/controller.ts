@@ -31,6 +31,8 @@ class ChallengeController {
       rights: this.gameStats.rights,
       wrongs: this.gameStats.wrongs,
     });
+
+    this.gameStats.sendStats();
   };
 
   private view = new View(this.answerHandler, this.gameOverHandler);

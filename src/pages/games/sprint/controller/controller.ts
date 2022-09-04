@@ -12,7 +12,7 @@ class SprintController {
   };
 
   private answerHandler = (answer: boolean) => {
-    this.gameStat.addAnswer(this.questions.currentWord, answer);
+    this.gameStats.addAnswer(this.questions.currentWord, answer);
     this.updateScore(answer);
     this.view.renderScorePanel(this.score);
     const question = this.questions.next();
@@ -29,16 +29,18 @@ class SprintController {
   private gameOverHandler = async () => {
     this.view.gameOver({
       points: this.score.points,
-      rights: this.gameStat.rights,
-      wrongs: this.gameStat.wrongs,
+      rights: this.gameStats.rights,
+      wrongs: this.gameStats.wrongs,
     });
+
+    this.gameStats.sendStats();
   };
 
   private view = new View(this.answerHandler, this.gameOverHandler);
 
   private questions = new Questions();
 
-  private gameStat = new GameStat('sprint');
+  private gameStats = new GameStat('sprint');
 
   async launch(group: number, page?: number): Promise<void> {
     this.view.renderLoadModal();
