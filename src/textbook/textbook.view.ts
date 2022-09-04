@@ -87,8 +87,8 @@ class TextbookView {
        </div>
        <div class="level-page-info">
           <div class="level-page frame">
-              <span>Level 1</span>
-              <span>Page 1</span>
+              <span class="level">Level 1</span>
+              <span class="page">Page 1</span>
           </div>   
            <div class="all-words-learned hide">Great work! This page is absolutely done!</div>
        </div>`,

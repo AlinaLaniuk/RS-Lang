@@ -40,6 +40,8 @@
     flex-direction: row;
     text-align: center;
     justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 .level-page{
     width: 80px;

@@ -38,8 +38,10 @@ class TextbookController {
         this.currentPage = 1;
         if (eventTarget.classList.contains('my-word')) {
           this.createWordCards(this.currentLevel, this.currentPage, true);
+          this.changePageLevelInfo(this.currentLevel + 1, this.currentPage);
         } else {
           this.createWordCards(this.currentLevel, this.currentPage);
+          this.changePageLevelInfo(this.currentLevel + 1, this.currentPage);
         }
         textbookView.createPagination(this.currentPage);
       }
@@ -61,8 +63,20 @@ class TextbookController {
         }
         textbookView.createPagination(this.currentPage);
         this.createWordCards(this.currentLevel, this.currentPage);
+        this.changePageLevelInfo(this.currentLevel + 1, this.currentPage);
       }
     });
+  }
+
+  changePageLevelInfo(level: number, page: number) {
+    const levelInfo = document.querySelector('.level') as HTMLElement;
+    const pageInfo = document.querySelector('.page') as HTMLElement;
+    if (level === 7) {
+      levelInfo.textContent = 'My words';
+    } else {
+      levelInfo.textContent = `Level ${level}`;
+      pageInfo.textContent = `Page ${page}`;
+    }
   }
 
   createWordCards(level: number, page: number, myWord?: boolean) {
@@ -169,6 +183,7 @@ class TextbookController {
     textbookView.setWordCardWrapper();
     this.paginationListener();
     this.createWordCards(this.currentLevel, this.currentPage);
+    this.changePageLevelInfo(this.currentLevel + 1, this.currentPage);
   }
 }
 export default TextbookController;

@@ -14,7 +14,6 @@ class AgregationAPI extends API {
         'Content-Type': 'application/json',
       },
     });
-    console.log(query);
     return rawResponse.json();
   };
 
