@@ -31,26 +31,34 @@ class StatsPage implements IComponent {
 
   private async getStats() {
     const response = await new StatsAPI().getStats();
-    const { sprint, audioChallenge, totalWords } = response.optional;
-    const currentDate = new Date().toISOString().split('T')[0];
-    const lastSprint = Object.values(sprint)[Object.keys(sprint).length - 1];
-    const sprintData = currentDate === lastSprint.day ? lastSprint : undefined;
-    const sprintBlock = this.gameBlock('Sprint', sprintData);
+    if (typeof response !== 'number') {
+      const { sprint, audioChallenge, totalWords } = response.optional;
+      const currentDate = new Date().toISOString().split('T')[0];
+      const lastSprint = Object.values(sprint)[Object.keys(sprint).length - 1];
+      const sprintData = currentDate === lastSprint.day ? lastSprint : undefined;
+      const sprintBlock = this.gameBlock('Sprint', sprintData);
 
-    const lastChallenge = Object.values(audioChallenge)[Object.keys(audioChallenge).length - 1];
-    const challengeData = currentDate === lastChallenge.day ? lastChallenge : undefined;
-    const challengeBlock = this.gameBlock('Audio challenge', challengeData);
+      const lastChallenge = Object.values(audioChallenge)[Object.keys(audioChallenge).length - 1];
+      const challengeData = currentDate === lastChallenge.day ? lastChallenge : undefined;
+      const challengeBlock = this.gameBlock('Audio challenge', challengeData);
 
-    const lastDay = Object.values(totalWords)[Object.keys(audioChallenge).length - 1];
-    const todayData = currentDate === lastDay.day ? lastDay : undefined;
-    const todayBlock = this.todayStatBlock(todayData, sprintData, challengeData);
+      const lastDay = Object.values(totalWords)[Object.keys(audioChallenge).length - 1];
+      const todayData = currentDate === lastDay.day ? lastDay : undefined;
+      const todayBlock = this.todayStatBlock(todayData, sprintData, challengeData);
 
-    const games = document.createElement('div');
-    games.className = 'games-wrapper';
-    games.innerHTML = todayBlock + sprintBlock + challengeBlock;
-    this.page.appendChild(games);
-    this.renderCharts(response);
-    this.page.appendChild(this.footer.render());
+      const games = document.createElement('div');
+      games.className = 'games-wrapper';
+      games.innerHTML = todayBlock + sprintBlock + challengeBlock;
+      this.page.appendChild(games);
+      this.renderCharts(response);
+      this.page.appendChild(this.footer.render());
+    } else {
+      const games = document.createElement('h3');
+      games.className = 'games-wrapper';
+      games.innerHTML = 'No data found. Please, play games for generate statistics.';
+      this.page.appendChild(games);
+      this.page.appendChild(this.footer.render());
+    }
   }
 
   private gameBlock(name: string, stats?: IGameStat) {
@@ -59,7 +67,7 @@ class StatsPage implements IComponent {
       <h2>${name}</h2>
       <div class='today-stats-in-game'>
         <div class='new-words'>
-          <span>${stats ? stats.newWords.length : 0}</span><span> new words</span>
+          <span>${stats ? stats.newWords : 0}</span><span> new words</span>
         </div>
         <div class='best-result'>
           <span>${stats ? stats.longestSeries : 0}</span><span> best series</span>
@@ -73,8 +81,8 @@ class StatsPage implements IComponent {
   }
 
   private todayStatBlock(todayData?: ITotalLearnedStat, sprint?: IGameStat, challenge?: IGameStat) {
-    const sprintWords = sprint ? sprint.newWords.length : 0;
-    const challengeWords = challenge ? challenge.newWords.replace(/'/g, '"').length : 0;
+    const sprintWords = sprint ? sprint.newWords : 0;
+    const challengeWords = challenge ? challenge.newWords : 0;
     let procent;
     if (sprint && challenge) {
       procent = sprint.percentCorrectAnswers + challenge.percentCorrectAnswers / 2;
@@ -119,15 +127,14 @@ class StatsPage implements IComponent {
     Object.values(stats.optional.sprint).forEach((el) => {
       const { day, newWords } = el;
       if (strDates.includes(day)) {
-        defaultData.splice(strDates.indexOf(day), 1, JSON.stringify(newWords).replace(/'/g, '"').length);
+        defaultData.splice(strDates.indexOf(day), 1, newWords);
       }
     });
 
     Object.values(stats.optional.audioChallenge).forEach((el) => {
       const { day, newWords } = el;
-      const arr = newWords.replace(/'/g, '"');
       if (strDates.includes(day)) {
-        const sum = defaultData[strDates.indexOf(day)] + JSON.parse(arr).length;
+        const sum = defaultData[strDates.indexOf(day)] + newWords;
         defaultData.splice(strDates.indexOf(day), 1, sum);
       }
     });
@@ -135,9 +142,8 @@ class StatsPage implements IComponent {
     const totalLearned:Array<number> = Array(10).fill(0);
     Object.values(stats.optional.totalWords).forEach((el) => {
       const { day, learned } = el;
-      const arr = learned.replace(/'/g, '"');
       if (strDates.includes(day)) {
-        totalLearned.splice(strDates.indexOf(day), 1, JSON.parse(arr).length);
+        totalLearned.splice(strDates.indexOf(day), 1, learned);
       }
     });
     let temp = 0;

@@ -1,5 +1,6 @@
 import { PageIds } from '../constants';
 import { IComponent } from '../types/interfaces';
+import TextBookController from '../textbook/textbook.controller';
 
 class Textbook implements IComponent {
   private page: HTMLDivElement;
@@ -11,6 +12,9 @@ class Textbook implements IComponent {
   }
 
   render() {
+    window.location.hash = PageIds.TextbookPage;
+    const textbookController = new TextBookController();
+    textbookController.launch();
     return this.page;
   }
 }

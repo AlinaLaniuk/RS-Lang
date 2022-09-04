@@ -29,7 +29,7 @@ class WordsAPI extends API {
     return rawResponse.json();
   };
 
-  public getUserWord = async (wordsId: string): Promise<Response> => {
+  public getUserWord = async (wordsId: string): Promise<IWord | string> => {
     const { userId, token } = JSON.parse(localStorage.getItem('autentificationInfo') as string);
     const rawResponse = await fetch(`${this.url}users/${userId}/words/${wordsId}`, {
       method: 'GET',
@@ -39,6 +39,9 @@ class WordsAPI extends API {
         'Content-Type': 'application/json',
       },
     });
+    if (rawResponse.status === 404) {
+      return '404';
+    }
     return rawResponse.json();
   };
 

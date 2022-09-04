@@ -1,0 +1,137 @@
+.frame{
+    border: 1px solid;
+    border-color: #6E6C79;
+}
+.level-panel{
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+}
+.level-button{
+    border: none;
+    width: 8%;
+    height: 30px;
+}
+.level-0{
+    background-color: #F8E6A4;
+}
+.level-1{
+    background-color: #FBDE5D;
+}
+.level-2{
+    background-color: #CFC4FC;
+}
+.level-3{
+    background-color: #BDAEF8;
+}
+.level-4{
+    background-color: #9F8DF3;
+}
+.level-5{
+    background-color: #7C6BF7;
+}
+.my-word{
+    background-color:rgb(132, 206, 208);
+}
+.level-page-info{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+}
+.level-page{
+    width: 80px;
+}
+.all-words-learned{
+    background-color: #7AA999;
+}
+.word-card{
+    width: 80%;
+    
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.word-card-img-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.word-card_img{
+    width: 100%;
+    max-width: 100%;
+}
+.word-card_info{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.word-card_info_word{
+    width: 20%;
+    margin-left: 3%;
+}
+.word-card_info_sound{
+    width: 10%;
+    margin-right: 3%;
+}
+.word-card_info_sound > img{
+    width: 100%;
+}
+.word-card_info_word-and-sound{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pagination-wrapper{
+    width: 50%;
+}
+.pagination{
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    justify-content: space-between;
+}
+.pagination-button{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pagination-button:hover{
+    background-color: #908F9B;
+    cursor: pointer;
+}
+.active{
+    background-color: #908F9B;
+}
+#prev{
+    width: 50px;
+}
+#next{
+    width: 50px;
+}
+.hide{
+    display: none;
+}
+.learned-difficult-button{
+    background-color: white;
+    width: 100px;
+    height: 40px;
+    border: 3px solid;
+}
+.not-learned-yet{
+    border-color: #7AA999;
+}
+.learned{
+    background-color: #7AA999;
+}
+.difficult{
+    background-color: #E8A385;
+}
+.not-difficult-yet{
+    border-color: #E8A385;
+}

@@ -2,6 +2,7 @@
   "name": "rs-lang",
   "version": "1.0.0",
   "description": "RS-School JSFE-2022Q1 final task",
+  
   "main": "webpack.base.config.js",
   "scripts": {
     "start": "webpack serve --open --config ./webpack.config.js --env mode=dev",
