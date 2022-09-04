@@ -31,26 +31,34 @@ class StatsPage implements IComponent {
 
   private async getStats() {
     const response = await new StatsAPI().getStats();
-    const { sprint, audioChallenge, totalWords } = response.optional;
-    const currentDate = new Date().toISOString().split('T')[0];
-    const lastSprint = Object.values(sprint)[Object.keys(sprint).length - 1];
-    const sprintData = currentDate === lastSprint.day ? lastSprint : undefined;
-    const sprintBlock = this.gameBlock('Sprint', sprintData);
+    if (typeof response !== 'number') {
+      const { sprint, audioChallenge, totalWords } = response.optional;
+      const currentDate = new Date().toISOString().split('T')[0];
+      const lastSprint = Object.values(sprint)[Object.keys(sprint).length - 1];
+      const sprintData = currentDate === lastSprint.day ? lastSprint : undefined;
+      const sprintBlock = this.gameBlock('Sprint', sprintData);
 
-    const lastChallenge = Object.values(audioChallenge)[Object.keys(audioChallenge).length - 1];
-    const challengeData = currentDate === lastChallenge.day ? lastChallenge : undefined;
-    const challengeBlock = this.gameBlock('Audio challenge', challengeData);
+      const lastChallenge = Object.values(audioChallenge)[Object.keys(audioChallenge).length - 1];
+      const challengeData = currentDate === lastChallenge.day ? lastChallenge : undefined;
+      const challengeBlock = this.gameBlock('Audio challenge', challengeData);
 
-    const lastDay = Object.values(totalWords)[Object.keys(audioChallenge).length - 1];
-    const todayData = currentDate === lastDay.day ? lastDay : undefined;
-    const todayBlock = this.todayStatBlock(todayData, sprintData, challengeData);
+      const lastDay = Object.values(totalWords)[Object.keys(audioChallenge).length - 1];
+      const todayData = currentDate === lastDay.day ? lastDay : undefined;
+      const todayBlock = this.todayStatBlock(todayData, sprintData, challengeData);
 
-    const games = document.createElement('div');
-    games.className = 'games-wrapper';
-    games.innerHTML = todayBlock + sprintBlock + challengeBlock;
-    this.page.appendChild(games);
-    this.renderCharts(response);
-    this.page.appendChild(this.footer.render());
+      const games = document.createElement('div');
+      games.className = 'games-wrapper';
+      games.innerHTML = todayBlock + sprintBlock + challengeBlock;
+      this.page.appendChild(games);
+      this.renderCharts(response);
+      this.page.appendChild(this.footer.render());
+    } else {
+      const games = document.createElement('h3');
+      games.className = 'games-wrapper';
+      games.innerHTML = 'No data found. Please, play games for generate statistics.';
+      this.page.appendChild(games);
+      this.page.appendChild(this.footer.render());
+    }
   }
 
   private gameBlock(name: string, stats?: IGameStat) {
