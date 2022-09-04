@@ -95,6 +95,14 @@ class TextbookView {
     );
   }
 
+  setMyWordPageWithoutAuthentication() {
+    const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
+    wordCardWrapper.insertAdjacentHTML(
+      'beforeend',
+      '<div class="wy-word-not-authentication"><div class="wy-word-not-authentication_content"><div>Please, log in!</div></div></div>',
+    );
+  }
+
   setPaginationPanel() {
     document.body.insertAdjacentHTML(
       'beforeend',

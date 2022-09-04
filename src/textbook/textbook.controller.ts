@@ -70,6 +70,9 @@ class TextbookController {
     wordCardWrapper.innerHTML = '';
     textbookModel.getWordsInfo(level, page - 1)
       .then((wordsInfo) => {
+        if (level === 6) {
+          textbookView.setMyWordPageWithoutAuthentication();
+        }
         if (wordsInfo.length > 1) {
           wordsInfo.forEach((wordInfo: IWordInfo) => {
             textbookView.setWordCard(wordInfo);

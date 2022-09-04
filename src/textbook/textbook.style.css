@@ -135,3 +135,17 @@
 .not-difficult-yet{
     border-color: #E8A385;
 }
+.wy-word-not-authentication{
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.wy-word-not-authentication_content{
+    width: 15%;
+    height: 100%;
+    background-color: #E8A385;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
