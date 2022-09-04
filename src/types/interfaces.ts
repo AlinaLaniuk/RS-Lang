@@ -14,14 +14,14 @@ export interface IStats {
 
 export interface IGameStat {
   day: string;
-  newWords: string;
+  newWords: number;
   percentCorrectAnswers: number;
   longestSeries: number;
 }
 
 export interface ITotalLearnedStat {
   day: string;
-  learned: string;
+  learned: number;
 }
 
 export interface IWord {

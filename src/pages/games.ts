@@ -25,7 +25,7 @@ class Games implements IComponent {
 
     const current = {
       day: currentDate,
-      newWords: JSON.stringify(['sdf7s8dft']),
+      newWords: 1,
       percentCorrectAnswers: 30,
       longestSeries: 10,
     };
@@ -38,7 +38,7 @@ class Games implements IComponent {
       const series = longestSeries > current.longestSeries ? longestSeries : current.longestSeries;
       const newDay = {
         day: old.day,
-        newWords: JSON.parse(old.newWords || '[]').concat(current.newWords),
+        newWords: old.newWords + current.newWords,
         percentCorrectAnswers: percent,
         longestSeries: series,
       };
