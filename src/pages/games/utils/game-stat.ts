@@ -23,10 +23,9 @@ class GameStat {
 
   private userWords: IUserWord[] = [];
 
-  private learnedWords: string[] = [];
+  private learnedWords = 0;
 
   constructor(private game: 'sprint' | 'audioChallenge') {
-    console.log(this.game);
     this.loadUserWords();
   }
 
@@ -35,7 +34,6 @@ class GameStat {
   async sendStats(): Promise<void> {
     if (this.auth.isLogedIn()) {
       await this.getStats();
-      console.log(this.stats);
       const sprintStats = this.stats.optional.sprint;
       const challengeStats = this.stats.optional.audioChallenge;
       const currentDate = new Date().toISOString().split('T')[0];
@@ -44,7 +42,7 @@ class GameStat {
 
       const current: IGameStat = {
         day: currentDate,
-        newWords: JSON.stringify(this.userWordsIds),
+        newWords: this.userWordsIds.length,
         percentCorrectAnswers: this.rightPercent,
         longestSeries: this.longestSeries,
       };
@@ -61,7 +59,7 @@ class GameStat {
 
         const newDay = {
           day: old.day,
-          newWords: JSON.parse(old.newWords || '[]').concat(current.newWords),
+          newWords: old.newWords + current.newWords,
           percentCorrectAnswers: percent,
           longestSeries: series,
         };
@@ -73,7 +71,7 @@ class GameStat {
       }
 
       const newStat: IStats = {
-        learnedWords: this.stats.learnedWords + this.learnedWords.length,
+        learnedWords: this.stats.learnedWords + this.learnedWords,
         optional: {
           sprint: this.game === 'sprint'
             ? Object.fromEntries(defaultData)
@@ -85,8 +83,6 @@ class GameStat {
           totalWords: this.stats.optional.totalWords,
         },
       };
-
-      console.log(newStat);
 
       await StatsAPI.setStats(newStat);
     }
@@ -101,8 +97,6 @@ class GameStat {
     this.userWords.forEach((word) => {
       if (word.wordId) this.userWordsIds.push(word.wordId);
     });
-    console.log(this.userWords);
-    console.log(this.userWordsIds);
   }
 
   private addNewUserWord(word: Word, answer: boolean): void {
@@ -122,10 +116,12 @@ class GameStat {
   private updateUserWord(word: Word, answer: boolean): void {
     const userWord = this.userWords.find((item) => item.wordId === word.id);
     if (userWord) {
-      const isHardLearned = userWord.optional.guessed - userWord.optional.mistakes > 3;
-      const isLearned = userWord.optional.guessed - userWord.optional.mistakes > 1;
+      const guessed = userWord.optional.guessed ?? 0;
+      const mistakes = userWord.optional.mistakes ?? 0;
+      const isHardLearned = guessed - mistakes > 3;
+      const isLearned = guessed - mistakes > 1;
 
-      if ((isHardLearned || isLearned) && answer) this.learnedWords.push(word.id);
+      if ((isHardLearned || isLearned) && answer) this.learnedWords += 1;
 
       this.wordsApi.updateUserWord(
         word.id,
@@ -133,8 +129,8 @@ class GameStat {
           difficulty: isHardLearned && answer ? 'easy' : userWord.difficulty,
           optional: {
             isLearned: isLearned && answer,
-            guessed: answer ? userWord.optional.guessed + 1 : userWord.optional.guessed,
-            mistakes: answer ? userWord.optional.mistakes : userWord.optional.mistakes + 1,
+            guessed: answer ? guessed + 1 : guessed,
+            mistakes: answer ? mistakes : mistakes + 1,
           },
         },
       );

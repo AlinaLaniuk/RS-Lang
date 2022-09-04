@@ -17,7 +17,7 @@ export const variantsPerQuestion = 4;
 
 const initGameStats:IGameStat = {
   day: new Date().toISOString().split('T')[0],
-  newWords: '',
+  newWords: 0,
   percentCorrectAnswers: 0,
   longestSeries: 0,
 };
@@ -34,7 +34,7 @@ export const initStats: IStats = {
     totalWords: {
       0: {
         day: new Date().toISOString().split('T')[0],
-        learned: '',
+        learned: 0,
       },
     },
   },
