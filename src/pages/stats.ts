@@ -83,15 +83,15 @@ class StatsPage implements IComponent {
   private todayStatBlock(todayData?: ITotalLearnedStat, sprint?: IGameStat, challenge?: IGameStat) {
     const sprintWords = sprint ? sprint.newWords : 0;
     const challengeWords = challenge ? challenge.newWords : 0;
-    let procent;
+    let percent;
     if (sprint && challenge) {
-      procent = sprint.percentCorrectAnswers + challenge.percentCorrectAnswers / 2;
+      percent = (sprint.percentCorrectAnswers + challenge.percentCorrectAnswers) / 2;
     } else if (sprint) {
-      procent = sprint.percentCorrectAnswers;
+      percent = sprint.percentCorrectAnswers;
     } else if (challenge) {
-      procent = challenge.percentCorrectAnswers;
+      percent = challenge.percentCorrectAnswers;
     } else {
-      procent = 0;
+      percent = 0;
     }
     return `
     <div class='today-block'>
@@ -104,7 +104,7 @@ class StatsPage implements IComponent {
           <span>${todayData ? todayData.learned : 0}</span><span> learned words</span>
         </div>
         <div class='correct-answers'>
-          <span>${procent}%</span><span> correct answers</span>
+          <span>${percent}%</span><span> correct answers</span>
         </div>
       </div>
     </div>
