@@ -8,6 +8,7 @@
 }
 
 .games-wrapper {
+    padding-top: 20px;
     display: flex;
     gap: 10px;
 }
@@ -39,5 +40,11 @@ h2 {
 canvas {
     max-width: 400px;
     max-height: 400px;
+    background-color: #fff;
+}
+
+.footer {
+    width: calc(100% - 100px);
+    padding-left: 100px;
     background-color: #fff;
 }
