@@ -2,8 +2,12 @@ import { getWords } from '../../services/words-api';
 import ChallengeQuestions from '../model/challenge-questions';
 import GameStat from '../../utils/game-stat';
 import View from '../view/view';
+import { omitLearned } from '../../utils/functions';
+import AutorizationModel from '../../../../autorization/autorization.model';
 
 class ChallengeController {
+  isLoggedIn = new AutorizationModel().isLogedIn();
+
   private score = 0;
 
   private questions = new ChallengeQuestions();
@@ -39,7 +43,9 @@ class ChallengeController {
 
   async launch(group: number, page?: number): Promise<void> {
     this.view.renderLoadModal();
-    const words = await getWords(group, page);
+    let words = await getWords(group, page);
+    if (this.isLoggedIn && page) words = await omitLearned(words);
+
     this.questions.addWords(words, !page);
     this.view.render(this.questions.next());
   }
