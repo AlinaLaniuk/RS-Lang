@@ -4,8 +4,14 @@ import { IWordInfo } from '../types/interfaces';
 class TextbookView {
   totalPage = 30;
 
+  container: HTMLElement;
+
+  constructor(container: HTMLElement) {
+    this.container = container;
+  }
+
   setWordCardWrapper() {
-    document.body.insertAdjacentHTML(
+    this.container.insertAdjacentHTML(
       'beforeend',
       `<div class="word-card-wrapper">
       </div>
@@ -74,7 +80,7 @@ class TextbookView {
   }
 
   setLevelPanel() {
-    document.body.insertAdjacentHTML(
+    this.container.insertAdjacentHTML(
       'beforeend',
       `<div class="level-panel">
            <button data-id="0" class="level-button level-0">Level 1</button>
@@ -104,7 +110,7 @@ class TextbookView {
   }
 
   setPaginationPanel() {
-    document.body.insertAdjacentHTML(
+    this.container.insertAdjacentHTML(
       'beforeend',
       `<div class="pagination-wrapper">
         <ul class="pagination">
@@ -116,7 +122,7 @@ class TextbookView {
   }
 
   createPagination(page: number) {
-    const paginationPanel = document.querySelector('.pagination') as HTMLElement;
+    const paginationPanel = this.container.querySelector('.pagination') as HTMLElement;
     let liTag = '';
     let active;
     let beforePage = page - 1;
@@ -130,7 +136,7 @@ class TextbookView {
     if (page > 2) {
       liTag += '<li class="pagination-button frame">1</li>';
       if (page > 3) {
-        liTag += '<li class="pagination-button frame">...</li>';
+        liTag += '<li id="dots-to-prev" class="pagination-button frame">...</li>';
       }
     }
     if (page === this.totalPage) {
@@ -156,7 +162,7 @@ class TextbookView {
     }
     if (page <= this.totalPage - 1) {
       if (page < this.totalPage - 2) {
-        liTag += '<li class="pagination-button frame">...</li>';
+        liTag += '<li id="dots-to-next" class="pagination-button frame">...</li>';
       }
     }
     if (page < this.totalPage) {

@@ -88,6 +88,8 @@
     align-items: center;
 }
 .pagination-wrapper{
+    margin-top: 30px;
+    margin-bottom: 30px;
     width: 50%;
 }
 .pagination{

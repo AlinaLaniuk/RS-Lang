@@ -2,8 +2,8 @@ import { IWordInfo } from '../types/interfaces';
 import TextbookModel from './textbook.model';
 import TextbookView from './textbook.view';
 
-const textbookModel = new TextbookModel();
-const textbookView = new TextbookView();
+// const textbookModel = new TextbookModel();
+// const textbookView = new TextbookView();
 
 function promisifyAudioPlaying(mediaElement: HTMLMediaElement):Promise<void> {
   return new Promise((resolve) => {
@@ -25,12 +25,24 @@ function removeHideClass() {
   });
 }
 class TextbookController {
+  model: TextbookModel;
+
+  view: TextbookView;
+
+  container: HTMLElement;
+
   currentPage = 1;
 
   currentLevel = 0;
 
+  constructor(container: HTMLElement) {
+    this.container = container;
+    this.model = new TextbookModel();
+    this.view = new TextbookView(container);
+  }
+
   levelPanelListener() {
-    const levelPanel = document.querySelector('.level-panel') as HTMLElement;
+    const levelPanel = this.container.querySelector('.level-panel') as HTMLElement;
     levelPanel.addEventListener('click', async (event) => {
       const eventTarget = event.target as HTMLElement;
       if (eventTarget.classList.contains('level-button')) {
@@ -43,25 +55,30 @@ class TextbookController {
           this.createWordCards(this.currentLevel, this.currentPage);
           this.changePageLevelInfo(this.currentLevel + 1, this.currentPage);
         }
-        textbookView.createPagination(this.currentPage);
+        this.view.createPagination(this.currentPage);
       }
     });
   }
 
   paginationListener() {
-    const paginationPanel = document.body.querySelector('.pagination-wrapper') as HTMLElement;
+    const paginationPanel = this.container.querySelector('.pagination-wrapper') as HTMLElement;
     paginationPanel.addEventListener('click', (event) => {
       const eventTarget = event.target as HTMLElement;
       const eventTargetContent = eventTarget.innerHTML;
       if (eventTarget.classList.contains('pagination-button')) {
-        if (eventTargetContent === 'Next') {
+        const pageNumber = +eventTargetContent;
+        if (eventTarget.id === 'dots-to-prev') {
+          this.currentPage -= 3;
+        } else if (eventTarget.id === 'dots-to-next') {
+          this.currentPage += 3;
+        } else if (eventTargetContent === 'Next') {
           this.currentPage += 1;
         } else if (eventTargetContent === 'Prev') {
           this.currentPage -= 1;
-        } else if (this.currentPage < textbookView.totalPage - 1) {
-          this.currentPage = +eventTargetContent;
+        } else if (pageNumber <= this.view.totalPage && pageNumber >= 0) {
+          this.currentPage = pageNumber;
         }
-        textbookView.createPagination(this.currentPage);
+        this.view.createPagination(this.currentPage);
         this.createWordCards(this.currentLevel, this.currentPage);
         this.changePageLevelInfo(this.currentLevel + 1, this.currentPage);
       }
@@ -69,8 +86,8 @@ class TextbookController {
   }
 
   changePageLevelInfo(level: number, page: number) {
-    const levelInfo = document.querySelector('.level') as HTMLElement;
-    const pageInfo = document.querySelector('.page') as HTMLElement;
+    const levelInfo = this.container.querySelector('.level') as HTMLElement;
+    const pageInfo = this.container.querySelector('.page') as HTMLElement;
     if (level === 7) {
       levelInfo.textContent = 'My words';
     } else {
@@ -80,21 +97,21 @@ class TextbookController {
   }
 
   createWordCards(level: number, page: number, myWord?: boolean) {
-    const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
+    const wordCardWrapper = this.container.querySelector('.word-card-wrapper') as HTMLElement;
     wordCardWrapper.innerHTML = '';
-    textbookModel.getWordsInfo(level, page - 1)
+    this.model.getWordsInfo(level, page - 1)
       .then((wordsInfo) => {
         if (level === 6) {
-          textbookView.setMyWordPageWithoutAuthentication();
+          this.view.setMyWordPageWithoutAuthentication();
         }
         if (wordsInfo.length > 1) {
           wordsInfo.forEach((wordInfo: IWordInfo) => {
-            textbookView.setWordCard(wordInfo);
+            this.view.setWordCard(wordInfo);
           });
           this.setAudioButtonListener();
         } else {
           wordsInfo[0].paginatedResults.forEach((wordInfo: IWordInfo) => {
-            textbookView.setWordCard(wordInfo);
+            this.view.setWordCard(wordInfo);
           });
           removeHideClass();
           this.setAudioButtonListener();
@@ -102,15 +119,15 @@ class TextbookController {
           this.setLearnedButtonListener();
           this.setDifficultButtonListener();
           if (myWord) {
-            const wordCardInfoBlockCollection = document.querySelectorAll('.word-card_info_word');
+            const wordCardInfoBlockCollection = this.container.querySelectorAll('.word-card_info_word');
             wordCardInfoBlockCollection.forEach((wordCardInfoBlock) => {
               wordCardInfoBlock.classList.add('my-word');
             });
-            const learnedButtonCollection = document.querySelectorAll('.not-learned-yet');
+            const learnedButtonCollection = this.container.querySelectorAll('.not-learned-yet');
             for (let i = 0; i < learnedButtonCollection.length; i += 1) {
               learnedButtonCollection[i].innerHTML = 'Learned and delete';
             }
-            const difficultButtonCollection = document.querySelectorAll('.not-difficult-yet');
+            const difficultButtonCollection = this.container.querySelectorAll('.not-difficult-yet');
             for (let i = 0; i < difficultButtonCollection.length; i += 1) {
               difficultButtonCollection[i].classList.add('hide');
             }
@@ -128,11 +145,11 @@ class TextbookController {
     } else if (isWordLearnedOrDifficult === 'difficult') {
       eventTarget.classList.add('difficult');
     }
-    return textbookModel.createOrUpdateLearnedWord(wordId, isWordLearnedOrDifficult);
+    return this.model.createOrUpdateLearnedWord(wordId, isWordLearnedOrDifficult);
   }
 
   setLearnedButtonListener() {
-    const notLearnedButtonsCollection = document.querySelectorAll('.not-learned-yet');
+    const notLearnedButtonsCollection = this.container.querySelectorAll('.not-learned-yet');
     notLearnedButtonsCollection.forEach((learnedButton) => {
       learnedButton.addEventListener('click', (event) => {
         const eventTarget = event.target as HTMLElement;
@@ -143,9 +160,9 @@ class TextbookController {
         } else {
           this.sendWordInfoStylingButton(event, 'learned');
         }
-        const learnedButtonCollection = document.querySelectorAll('.learned');
+        const learnedButtonCollection = this.container.querySelectorAll('.learned');
         if (learnedButtonCollection.length === 20) {
-          const allWordsLearnedMark = document.querySelector('.all-words-learned');
+          const allWordsLearnedMark = this.container.querySelector('.all-words-learned');
           allWordsLearnedMark?.classList.remove('hide');
         }
       });
@@ -153,7 +170,7 @@ class TextbookController {
   }
 
   setDifficultButtonListener() {
-    const difficultButtonsCollection = document.querySelectorAll('.not-difficult-yet');
+    const difficultButtonsCollection = this.container.querySelectorAll('.not-difficult-yet');
     difficultButtonsCollection.forEach((difficultButton) => {
       difficultButton.addEventListener('click', (event) => {
         this.sendWordInfoStylingButton(event, 'difficult');
@@ -162,7 +179,7 @@ class TextbookController {
   }
 
   setAudioButtonListener() {
-    const audioButtonCollection = document.querySelectorAll('.word-card_info_sound');
+    const audioButtonCollection = this.container.querySelectorAll('.word-card_info_sound');
     audioButtonCollection.forEach((audioButton) => {
       audioButton.addEventListener('click', (event) => {
         const eventTarget = event.target as HTMLElement;
@@ -177,10 +194,10 @@ class TextbookController {
   }
 
   launch() {
-    textbookView.setLevelPanel();
+    this.view.setLevelPanel();
     this.levelPanelListener();
-    textbookView.setPaginationPanel();
-    textbookView.setWordCardWrapper();
+    this.view.setPaginationPanel();
+    this.view.setWordCardWrapper();
     this.paginationListener();
     this.createWordCards(this.currentLevel, this.currentPage);
     this.changePageLevelInfo(this.currentLevel + 1, this.currentPage);
