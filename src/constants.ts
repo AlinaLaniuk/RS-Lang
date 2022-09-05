@@ -13,21 +13,21 @@ export const NavigationButtons = [
   {
     id: PageIds.MainPage,
     text: 'Main',
-    img: '/assets/img/main-page.svg',
+    img: './assets/img/main-page.svg',
   },
   {
     id: PageIds.TextbookPage,
     text: 'Textbook',
-    img: '/assets/img/textbook.svg',
+    img: './assets/img/textbook.svg',
   },
   {
     id: PageIds.GamesPage,
     text: 'Games',
-    img: '/assets/img/game-pad.svg',
+    img: './assets/img/game-pad.svg',
   },
   {
     id: PageIds.StatsPage,
     text: 'Stats',
-    img: '/assets/img/statistics.svg',
+    img: './assets/img/statistics.svg',
   },
 ];

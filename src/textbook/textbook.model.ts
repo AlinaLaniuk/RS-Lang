@@ -16,7 +16,7 @@ class TextbookModel {
     const userInfo = getAutentificationInfo();
     const wordsInfoForNotAutorizated = await (await fetch(`${API_URL}words?group=${group}&page=${page}`)).json();
     if (userInfo && isAuthorized && group === 6) {
-      const wordsInfoForMyWordPage = await agregationAPI.getAllAgregations({ wordsPerPage: '20', filter: JSON.stringify({ $and: [{ 'userWord.difficulty': 'hard', 'userWord.optional.isLearned': false }] }) });
+      const wordsInfoForMyWordPage = await agregationAPI.getAllAgregations({ wordsPerPage: '4000', filter: JSON.stringify({ $and: [{ 'userWord.difficulty': 'hard', 'userWord.optional.isLearned': false }] }) });
       return wordsInfoForMyWordPage;
     }
     if (userInfo && isAuthorized) {
