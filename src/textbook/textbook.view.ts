@@ -1,6 +1,8 @@
 import './textbook.style.css';
 import { IWordInfo } from '../types/interfaces';
+import AutorizationModel from '../autorization/autorization.model';
 
+const isAuthorized = new AutorizationModel().isLogedIn();
 class TextbookView {
   totalPage = 30;
 
@@ -21,6 +23,7 @@ class TextbookView {
 
   setWordCard(wordData: IWordInfo) {
     const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
+    console.log(wordData);
     const difficultClass = () => {
       if (wordData.userWord?.difficulty === 'hard') {
         return 'difficult';
@@ -70,9 +73,9 @@ class TextbookView {
                  <span>${wordData.textExample}</span>
                  <span>${wordData.textExampleTranslate}</span>
               </div>
-              <div class="stat-info">
-                 <span>Guessed: </span>
-                 <span>Mistakes: </span>
+              <div class="stat-info ${isAuthorized ? '' : 'hide'}">
+                 <span>Guessed: ${wordData.userWord?.optional.guessed === undefined ? 0 : wordData.userWord?.optional.guessed}</span>
+                 <span>Mistakes: ${wordData.userWord?.optional.mistakes === undefined ? 0 : wordData.userWord?.optional.mistakes}</span>
               </div>
            </div>
         </div>`,
@@ -89,7 +92,7 @@ class TextbookView {
            <button data-id="3" class="level-button level-3">Level 4</button>
            <button data-id="4" class="level-button level-4">Level 5</button>
            <button data-id="5" class="level-button level-5">Level 6</button>
-           <button data-id="6" class="level-button my-word">My words</button>
+           <button data-id="6" class="level-button my-word ${isAuthorized ? '' : 'hide'}">My words</button>
        </div>
        <div class="level-page-info">
           <div class="level-page frame">
