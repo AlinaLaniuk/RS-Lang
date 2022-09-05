@@ -49,7 +49,6 @@ class ChallengeTimer {
       () => {
         this.timePassed += 1;
         this.timeLeft = this.timeLimit - this.timePassed;
-        // this.timeLabel.innerText = this.timeLeft.toString();
 
         if (this.timeLeft <= 0) {
           clearInterval(this.interval);
