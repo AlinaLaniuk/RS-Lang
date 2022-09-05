@@ -18,7 +18,7 @@ export const variantsPerQuestion = 4;
 const initGameStats:IGameStat = {
   day: new Date().toISOString().split('T')[0],
   newWords: 0,
-  percentCorrectAnswers: 0,
+  percentCorrectAnswers: 100,
   longestSeries: 0,
 };
 

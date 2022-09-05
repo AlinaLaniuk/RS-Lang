@@ -1,10 +1,14 @@
+import AutorizationModel from '../../../../autorization/autorization.model';
 import { getWords } from '../../services/words-api';
 import { IScore } from '../../types/types';
+import { omitLearned } from '../../utils/functions';
 import GameStat from '../../utils/game-stat';
 import Questions from '../model/questions';
 import View from '../view/view';
 
 class SprintController {
+  isLoggedIn = new AutorizationModel().isLogedIn();
+
   private score: IScore = {
     points: 0,
     bonus: 1,
@@ -44,7 +48,9 @@ class SprintController {
 
   async launch(group: number, page?: number): Promise<void> {
     this.view.renderLoadModal();
-    const words = await getWords(group, page);
+    let words = await getWords(group, page);
+    if (this.isLoggedIn && page) words = await omitLearned(words);
+
     this.questions.addWords(words, !page);
     this.view.render(
       this.score,

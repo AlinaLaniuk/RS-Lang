@@ -2,20 +2,23 @@ import { getWords } from '../../services/words-api';
 import ChallengeQuestions from '../model/challenge-questions';
 import GameStat from '../../utils/game-stat';
 import View from '../view/view';
+import { omitLearned } from '../../utils/functions';
+import AutorizationModel from '../../../../autorization/autorization.model';
 
 class ChallengeController {
-  private score = 0;
+  isLoggedIn = new AutorizationModel().isLogedIn();
+
+  private questionNumber = 0;
 
   private questions = new ChallengeQuestions();
 
   private gameStats = new GameStat('audioChallenge');
 
   private answerHandler = (answer: boolean) => {
-    if (answer) {
-      this.score += 1;
-    }
+    this.questionNumber += 1;
+
     this.gameStats.addAnswer(this.questions.currentWord, answer);
-    this.view.setScore(this.score);
+    this.view.setScore(this.questionNumber);
 
     const question = this.questions.next();
     if (question.hasNext) {
@@ -27,7 +30,7 @@ class ChallengeController {
 
   private gameOverHandler = async () => {
     this.view.gameOver({
-      points: this.score,
+      points: this.questionNumber,
       rights: this.gameStats.rights,
       wrongs: this.gameStats.wrongs,
     });
@@ -39,7 +42,9 @@ class ChallengeController {
 
   async launch(group: number, page?: number): Promise<void> {
     this.view.renderLoadModal();
-    const words = await getWords(group, page);
+    let words = await getWords(group, page);
+    if (this.isLoggedIn && page) words = await omitLearned(words);
+
     this.questions.addWords(words, !page);
     this.view.render(this.questions.next());
   }

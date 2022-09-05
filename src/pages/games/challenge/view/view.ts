@@ -24,7 +24,8 @@ class View {
 
   private timer = new ChallengeTimer();
 
-  private parent = document.getElementById('challenge');
+  private parent = document.body;
+  // private parent = document.getElementById('challenge');
 
   renderModal() {
     this.parent?.append(this.modal.render());
