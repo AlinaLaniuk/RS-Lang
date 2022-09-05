@@ -1,0 +1,41 @@
+.load-modal {
+  opacity: 0.5;
+  position: fixed;
+  top: 0px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #bdaef8;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.load-spinner {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+.load-spinner:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: load-spinner 1.2s linear infinite;
+}
+
+@keyframes load-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

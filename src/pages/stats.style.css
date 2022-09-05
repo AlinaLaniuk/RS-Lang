@@ -1,0 +1,54 @@
+#stats {
+    background-color: #BDAEF8;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+#stats h3 {
+    height: 100vh;
+}
+
+.games-wrapper {
+    padding-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+h2 {
+    margin: 10px 10px;
+}
+
+.game-block, 
+.today-block {
+    border: 2px solid #3b3b3d;
+    height: fit-content;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px, 10px;
+    padding: 5px 5px;
+    min-width: 200px;
+}
+
+.charts-wrapper {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+canvas {
+    max-width: 400px;
+    max-height: 400px;
+    background-color: #fff;
+}
+
+.footer {
+    width: calc(100% - 100px);
+    padding-left: 100px;
+    background-color: #fff;
+}

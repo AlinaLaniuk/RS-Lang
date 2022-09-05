@@ -1,0 +1,107 @@
+a {
+  text-decoration: none;
+}
+
+.games {
+  padding: 80px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.game-button {
+  min-width: 360px;
+  max-width: 360px;
+  height: 360px;
+  border: 1px #6E6C79 solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon {
+  width: 200px;
+  height: 200px;
+}
+
+.icon.sprint {
+  background-image: url("../../assets/icons/sprint-icon.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.icon.challenge {
+  background-image: url("../../assets/icons/audio-challenge-icon.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.label {
+  color: #6E6C79;
+  font-size: 84px;
+  font-family: sans-serif;
+}
+
+.label.challenge {
+  font-size: 56px;
+  text-align: center;
+}
+
+.game-container {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+}
+
+.game-header {
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 32px;
+  color: #6E6C79;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.button {
+  width: 70px;
+  height: 25px;
+  color: #6E6C79;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.button.level-1 {
+  background-color: #F8E6A4;
+}
+
+.button.level-2 {
+  background-color: #FBDE5D;
+}
+
+.button.level-3 {
+  background-color: #CFC4FC;
+}
+
+.button.level-4 {
+  background-color: #BDAEF8;
+}
+
+.button.level-5 {
+  background-color: #9F8DF3;
+  color: #3b3b3b;
+}
+
+.button.level-6 {
+  background-color: #7C6BF7;
+  color: #3b3b3b;
+}

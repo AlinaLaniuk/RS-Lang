@@ -1,0 +1,149 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#main {
+    padding-left: 100px;
+}
+
+#main-info-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-info-description {
+    width: 450px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.main-label {
+    width: 450px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: rgba(122, 169, 153, 0.4);
+}
+
+.main-info-img img {
+    width: 40vw;
+}
+
+h1 {
+    font-size: 60px;
+    color: #3b3b3d;
+}
+
+#main-possibilities-wrapper, 
+#main-video-wrapper,
+#main-team-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 15px 15px;
+    gap: 10px;
+}
+
+/* Удалить если надумаем прикрутить видео */
+#main-video-wrapper {
+    display: none;
+}
+
+hr {
+    width: 90vw;
+}
+
+.feature-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 900px
+}
+
+.feature {
+    border: 2px solid #3b3b3d;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px, 10px;
+    padding: 15px 15px;
+}
+
+.feature img {
+    width: 60px;
+    height: 70px;
+    filter: invert(1);
+}
+
+.team-wrapper {
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.coworker {
+    padding: 15px 15px;
+    display: flex;
+    border: 2px solid #3b3b3d;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.coworker-avatar {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #3b3b3d;
+}
+
+.coworker-role{
+    padding-left: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 300px;
+    border: 2px solid #3b3b3d;
+}
+
+.github-button {
+    width: 80px;
+    display: flex;
+    gap: 5px;
+}
+
+footer .github-button {
+    align-self: center;
+}
+
+.github-button svg {
+    width: 25px;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.github-button:hover {
+    color:rgba(122, 169, 153, 0.4);
+}
+
+.rss-logo svg {
+    width: 100px;
+}
+
+.footer-data {
+    display: flex;
+    flex-direction: row;
+}
