@@ -40,16 +40,51 @@
     flex-direction: row;
     text-align: center;
     justify-content: center;
+    margin-top: 30px;
+}
+.games-button-wrapper{
+    position: absolute;
+    top: 0;
+    display: flex;
+    width: 30%;
+    justify-content: space-between;
+
+}
+.games-block{
+    width: 140px;
+    height: 52px;
+    background-color: white;
+    font-size: 1em;
+    color: black;
+    border: 2px solid #3b3b3d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .level-page{
     width: 80px;
 }
 .all-words-learned{
     background-color: #7AA999;
+    margin-left: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.learned-page{
+    background: rgba(122,169,153, 0.2);
+}
+#textbook{
+    display: flex;
+    align-items: center;
+    width: 80%;
+    flex-direction: column;
+}
+.word-card-wrapper{
+    width: 100%;
 }
 .word-card{
-    width: 80%;
-    
+    width: 100%;
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
@@ -86,6 +121,8 @@
     align-items: center;
 }
 .pagination-wrapper{
+    margin-top: 30px;
+    margin-bottom: 30px;
     width: 50%;
 }
 .pagination{
@@ -134,4 +171,18 @@
 }
 .not-difficult-yet{
     border-color: #E8A385;
+}
+.wy-word-not-authentication{
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.wy-word-not-authentication_content{
+    width: 15%;
+    height: 100%;
+    background-color: #E8A385;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

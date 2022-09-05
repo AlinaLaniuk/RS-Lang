@@ -3,6 +3,7 @@ import { IComponent } from '../types/interfaces';
 import TextBookController from '../textbook/textbook.controller';
 import AutorizationModel from '../autorization/autorization.model';
 import AutorizationController from '../autorization/autorization.controller';
+import './textbook.style.css';
 
 class Textbook implements IComponent {
   private page: HTMLDivElement;
@@ -10,7 +11,6 @@ class Textbook implements IComponent {
   constructor(id: PageIds) {
     this.page = document.createElement('div');
     this.page.id = id;
-    this.page.innerText = id;
   }
 
   render() {
@@ -21,7 +21,7 @@ class Textbook implements IComponent {
       new AutorizationController().listenLoginButton();
     }
     window.location.hash = PageIds.TextbookPage;
-    const textbookController = new TextBookController();
+    const textbookController = new TextBookController(this.page);
     textbookController.launch();
     return this.page;
   }
