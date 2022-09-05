@@ -42,7 +42,7 @@ class GameStat {
 
       const current: IGameStat = {
         day: currentDate,
-        newWords: this.userWordsIds.length,
+        newWords: this.rights.length + this.wrongs.length,
         percentCorrectAnswers: this.rightPercent,
         longestSeries: this.longestSeries,
       };
