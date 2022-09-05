@@ -202,16 +202,27 @@ class TextbookController {
     gamesButtonWrapper.addEventListener('click', (event) => {
       const eventTarget = event.target as HTMLElement;
       if (eventTarget.classList.contains('sprint')) {
-        window.location.href = 'http://localhost:8080/#sprint';
         const controller = new SprintController();
         controller.launch(this.currentLevel, this.currentPage);
       } else if (eventTarget.classList.contains('challenge')) {
-        window.location.href = 'http://localhost:8080/#challenge';
         const controller = new ChallengeController();
         controller.launch(this.currentLevel, this.currentPage);
       }
     });
   }
+
+  // logButtonListener() {
+  //   (document.querySelector('#login-button') as HTMLElement).addEventListener('click', () => {
+  //     const url = window.location.href;
+  //     if (url.includes('textbook')) {
+  //       const delimiterIndex = url.indexOf('#');
+  //       const prefix = url.slice(0, delimiterIndex);
+  //       const targetRoute = `${prefix}#main`;
+  //       window.location.href = targetRoute;
+  //       window.location.href = `${prefix}#textbook`;
+  //     }
+  //   });
+  // }
 
   setAudioButtonListener() {
     const audioButtonCollection = this.container.querySelectorAll('.word-card_info_sound');
@@ -229,13 +240,14 @@ class TextbookController {
   }
 
   launch() {
+    // this.logButtonListener();
     this.view.setGameButtons();
+    this.setGamesButtonsListener();
     this.view.setLevelPanel();
     this.levelPanelListener();
     this.view.setPaginationPanel();
     this.view.setWordCardWrapper();
     this.paginationListener();
-    this.setGamesButtonsListener();
     this.createWordCards(this.currentLevel, this.currentPage);
     this.changePageLevelInfo(this.currentLevel + 1, this.currentPage);
   }

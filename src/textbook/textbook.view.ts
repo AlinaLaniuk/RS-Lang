@@ -117,16 +117,14 @@ class TextbookView {
   }
 
   setGameButtons() {
-    if (isAuthorized) {
-      this.container.insertAdjacentHTML(
-        'beforeend',
-        `<div class="games-button-wrapper">
+    this.container.insertAdjacentHTML(
+      'beforeend',
+      `<div class="games-button-wrapper">
           <div class="sprint games-block"><span>Sprint</span></div>
           <div class="audio-challenge games-block"><span>Audio challenge</span></div>
          </div>
        `,
-      );
-    }
+    );
   }
 
   createPagination(page: number) {

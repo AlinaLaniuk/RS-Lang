@@ -73,6 +73,7 @@ class AutorizationModel {
   public logout = () => {
     localStorage.removeItem('autentificationInfo');
     new AutorizationView().loginButton(false);
+    window.location.reload();
   };
 
   public login = async (user: IUser):Promise<boolean> => {
@@ -83,6 +84,7 @@ class AutorizationModel {
     if ((await response).status === 200) {
       this.closeModal();
       this.saveInfo(await (await response).json());
+      window.location.reload();
       return true;
     }
     this.showLoginError((await response).status);
