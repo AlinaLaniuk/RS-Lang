@@ -3,7 +3,7 @@ a {
 }
 
 .games {
-  margin: 80px;
+  padding: 80px;
   display: flex;
   justify-content: space-evenly;
 }
@@ -24,12 +24,14 @@ a {
   width: 200px;
   height: 200px;
 }
+
 .icon.sprint {
   background-image: url("../../assets/icons/sprint-icon.svg");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
+
 .icon.challenge {
   background-image: url("../../assets/icons/audio-challenge-icon.svg");
   background-size: contain;
@@ -42,6 +44,7 @@ a {
   font-size: 84px;
   font-family: sans-serif;
 }
+
 .label.challenge {
   font-size: 56px;
   text-align: center;
