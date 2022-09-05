@@ -26,7 +26,8 @@ class View {
 
   private timer = new Timer(this.gameOverCallback);
 
-  private parent = document.getElementById('sprint');
+  // private parent = document.getElementById('sprint');
+  private parent = document.body;
 
   renderModal() {
     this.parent?.append(this.modal.render());
