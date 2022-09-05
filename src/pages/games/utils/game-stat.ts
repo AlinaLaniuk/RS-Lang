@@ -1,5 +1,7 @@
 import { Word } from '../types/types';
-import { IGameStat, IStats, IWord as IUserWord } from '../../../types/interfaces';
+import {
+  IGameStat, IStats, ITotalLearnedStat, IWord as IUserWord,
+} from '../../../types/interfaces';
 import UserWords from '../services/user-words-api';
 import AutorizationModel from '../../../autorization/autorization.model';
 import WordsAPI from '../../../services/words';
@@ -31,6 +33,11 @@ class GameStat {
 
   private stats: IStats = initStats;
 
+  private get newWordsCount():number {
+    const words = [...this.rights, ...this.wrongs];
+    return words.filter((word) => !this.userWordsIds.includes(word.id)).length;
+  }
+
   async sendStats(): Promise<void> {
     if (this.auth.isLogedIn()) {
       await this.getStats();
@@ -42,12 +49,19 @@ class GameStat {
 
       const current: IGameStat = {
         day: currentDate,
-        newWords: this.rights.length + this.wrongs.length,
+        newWords: this.newWordsCount,
         percentCorrectAnswers: this.rightPercent,
         longestSeries: this.longestSeries,
       };
 
+      const currentTotal: ITotalLearnedStat = {
+        day: currentDate,
+        learned: this.learnedWords,
+      };
+
       const defaultData = new Map(Object.entries(gameStats));
+
+      const defaultTotalWord = new Map(Object.entries(this.stats.optional.totalWords));
 
       if (defaultData.get(lastIndex)?.day === currentDate) {
         const old = defaultData.get(lastIndex) as IGameStat;
@@ -66,8 +80,18 @@ class GameStat {
 
         defaultData.delete(lastIndex);
         defaultData.set(lastIndex, newDay);
+
+        const oldTotal = defaultTotalWord.get(lastIndex) as ITotalLearnedStat;
+        const newTotal: ITotalLearnedStat = {
+          day: oldTotal.day,
+          learned: oldTotal.learned + this.learnedWords,
+        };
+
+        defaultTotalWord.delete(lastIndex);
+        defaultTotalWord.set(lastIndex, newTotal);
       } else {
         defaultData.set((Number(lastIndex) + 1).toString(), current);
+        defaultTotalWord.set((Number(lastIndex) + 1).toString(), currentTotal);
       }
 
       const newStat: IStats = {
@@ -80,7 +104,7 @@ class GameStat {
             ? Object.fromEntries(defaultData)
             : this.stats.optional.audioChallenge,
 
-          totalWords: this.stats.optional.totalWords,
+          totalWords: Object.fromEntries(defaultTotalWord),
         },
       };
 
@@ -99,7 +123,7 @@ class GameStat {
     });
   }
 
-  private addNewUserWord(word: Word, answer: boolean): void {
+  private createNewUserWord(word: Word, answer: boolean): void {
     this.wordsApi.createUserWord(
       word.id,
       {
@@ -121,7 +145,7 @@ class GameStat {
       const isHardLearned = guessed - mistakes > 3;
       const isLearned = guessed - mistakes > 1;
 
-      if ((isHardLearned || isLearned) && answer) this.learnedWords += 1;
+      if ((isLearned || isHardLearned) && answer) this.learnedWords += 1;
 
       this.wordsApi.updateUserWord(
         word.id,
@@ -168,7 +192,7 @@ class GameStat {
 
     if (this.auth.isLogedIn()) {
       if (!this.userWordsIds.includes(word.id)) {
-        this.addNewUserWord(word, result);
+        this.createNewUserWord(word, result);
       } else {
         this.updateUserWord(word, result);
       }
