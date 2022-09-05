@@ -39,7 +39,7 @@ class MainPage implements IComponent {
       </div>
       <div class="main-info-img">
         <img
-        src="/assets/img/imf-for-main.svg"
+        src="./assets/img/imf-for-main.svg"
         />
       </div>`;
     const root = document.createElement('div');
@@ -54,22 +54,22 @@ class MainPage implements IComponent {
       <h1>Welcome to RS Lang</h1>
       <div class="feature-wrapper">
         <div class="feature">
-          <img src="/assets/img/textbook.svg"></img>
+          <img src="./assets/img/textbook.svg"></img>
           <h3>Textbook</h3>
           <p>The electronic textbook consists of six sections. Each section has 30 pages of 20 words. The tfanslation of the word, the thematic image, as well as the pronunciation of both the word separately and as part of the phase are presente.</p>
         </div>
         <div class="feature">
-          <img src="/assets/img/pen.svg"></img>
+          <img src="./assets/img/pen.svg"></img>
           <h3>Dictionary</h3>
           <p>The dictionary contains lists of studied words, words that do not need to be learned, as well as those that cause difficulties. The dictionary reflects statistics for each section and stadent progress.</p>
         </div>
         <div class="feature">
-          <img src="/assets/img/game-pad.svg"></img>
+          <img src="./assets/img/game-pad.svg"></img>
           <h3>Games</h3>
           <p>For learning words and reinforcing memorization, the application has 2 games: Sprint and Audio chellenge, which will help you to "pump" your vocabulary in a playful way.</p>
         </div>
         <div class="feature">
-          <img src="/assets/img/statistics.svg"></img>
+          <img src="./assets/img/statistics.svg"></img>
           <h3>Statistics</h3>
           <p>All the progress of training can be viewed in statistics, where data for the current day, as well as for the entire training period, are presented. The information is presented both in the form of a table and graphs, which is very convenient.</p>
         </div>
@@ -86,7 +86,7 @@ class MainPage implements IComponent {
       <h1>Developer's team</h1>
       <div class="team-wrapper">
         <div class="coworker">
-          <img class="coworker-avatar" src="/assets/img/alina.png"></img>
+          <img class="coworker-avatar" src="./assets/img/alina.png"></img>
           <div class="coworker-role">
             <h3>Team lead</h3>
             <a class="github-button" href="https://github.com/AlinaLaniuk">
@@ -97,7 +97,7 @@ class MainPage implements IComponent {
           </div>
         </div>
         <div class="coworker">
-          <img class="coworker-avatar" src="/assets/img/alibek.png"></img>
+          <img class="coworker-avatar" src="./assets/img/alibek.png"></img>
           <div class="coworker-role">
             <h3>Developer</h3>
             <a class="github-button" href="https://github.com/aapanasov">
@@ -108,7 +108,7 @@ class MainPage implements IComponent {
           </div>
         </div>
         <div class="coworker">
-          <img class="coworker-avatar" src="/assets/img/dima.png"></img>
+          <img class="coworker-avatar" src="./assets/img/dima.png"></img>
           <div class="coworker-role">
             <h3>Developer</h3>
             <a class="github-button" href="https://github.com/Liirus91">
@@ -132,7 +132,7 @@ class MainPage implements IComponent {
       <hr>
       <h1>How to use</h1>
       <div class="video-wrapper">
-       
+
       </div>`;
     const root = document.createElement('div');
     root.id = 'main-video-wrapper';

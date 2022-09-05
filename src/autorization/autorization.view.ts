@@ -40,7 +40,7 @@ class AutorizationView {
         style="margin-left: calc(100vw - 200px)">
         <span style="display: flex; align-items: center;">
           <img
-            src="/assets/img/authorization.svg"
+            src="./assets/img/authorization.svg"
             width="32px"
             height="32px"
             viewBox="0 0 528.37 688.86"

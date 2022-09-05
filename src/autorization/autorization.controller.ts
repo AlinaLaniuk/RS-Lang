@@ -72,7 +72,7 @@ class AutorizationController {
     btnHTML.href = '#stats';
     btnHTML.innerText = 'Stats';
     const img = document.createElement('img');
-    img.src = '/assets/img/statistics.svg';
+    img.src = './assets/img/statistics.svg';
     btnHTML.appendChild(img);
     navButtons.append(btnHTML);
   };
