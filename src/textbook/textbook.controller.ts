@@ -1,6 +1,8 @@
 import { IWordInfo } from '../types/interfaces';
 import TextbookModel from './textbook.model';
 import TextbookView from './textbook.view';
+import ChallengeController from '../pages/games/challenge/controller/controller';
+import SprintController from '../pages/games/sprint/controller/controller';
 
 function promisifyAudioPlaying(mediaElement: HTMLMediaElement):Promise<void> {
   return new Promise((resolve) => {
@@ -195,6 +197,22 @@ class TextbookController {
     });
   }
 
+  setGamesButtonsListener() {
+    const gamesButtonWrapper = this.container.querySelector('.games-button-wrapper') as HTMLElement;
+    gamesButtonWrapper.addEventListener('click', (event) => {
+      const eventTarget = event.target as HTMLElement;
+      if (eventTarget.classList.contains('sprint')) {
+        window.location.href = 'http://localhost:8080/#sprint';
+        const controller = new SprintController();
+        controller.launch(this.currentLevel, this.currentPage);
+      } else if (eventTarget.classList.contains('challenge')) {
+        window.location.href = 'http://localhost:8080/#challenge';
+        const controller = new ChallengeController();
+        controller.launch(this.currentLevel, this.currentPage);
+      }
+    });
+  }
+
   setAudioButtonListener() {
     const audioButtonCollection = this.container.querySelectorAll('.word-card_info_sound');
     audioButtonCollection.forEach((audioButton) => {
@@ -211,11 +229,13 @@ class TextbookController {
   }
 
   launch() {
+    this.view.setGameButtons();
     this.view.setLevelPanel();
     this.levelPanelListener();
     this.view.setPaginationPanel();
     this.view.setWordCardWrapper();
     this.paginationListener();
+    this.setGamesButtonsListener();
     this.createWordCards(this.currentLevel, this.currentPage);
     this.changePageLevelInfo(this.currentLevel + 1, this.currentPage);
   }
