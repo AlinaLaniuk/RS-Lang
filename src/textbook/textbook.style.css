@@ -41,17 +41,31 @@
     text-align: center;
     justify-content: center;
     margin-top: 30px;
-    margin-bottom: 30px;
 }
 .level-page{
     width: 80px;
 }
 .all-words-learned{
     background-color: #7AA999;
+    margin-left: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.learned-page{
+    background: rgba(122,169,153, 0.2);
+}
+#textbook{
+    display: flex;
+    align-items: center;
+    width: 80%;
+    flex-direction: column;
+}
+.word-card-wrapper{
+    width: 100%;
 }
 .word-card{
-    width: 80%;
-    
+    width: 100%;
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;

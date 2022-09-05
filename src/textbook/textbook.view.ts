@@ -96,16 +96,8 @@ class TextbookView {
               <span class="level">Level 1</span>
               <span class="page">Page 1</span>
           </div>   
-           <div class="all-words-learned hide">Great work! This page is absolutely done!</div>
+           <div class="all-words-learned hide"><div>Great work! This page is absolutely done!</div></div>
        </div>`,
-    );
-  }
-
-  setMyWordPageWithoutAuthentication() {
-    const wordCardWrapper = document.querySelector('.word-card-wrapper') as HTMLElement;
-    wordCardWrapper.insertAdjacentHTML(
-      'beforeend',
-      '<div class="wy-word-not-authentication"><div class="wy-word-not-authentication_content"><div>Please, log in!</div></div></div>',
     );
   }
 
