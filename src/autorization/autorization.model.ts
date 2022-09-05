@@ -98,9 +98,9 @@ class AutorizationModel {
     const status = await message;
     if (status !== 'Ok') {
       this.showRegistrationError(status);
-      return true;
+      return false;
     }
-    return false;
+    return true;
   };
 
   // TODO: Можно вынести в utils
