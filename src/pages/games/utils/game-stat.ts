@@ -26,7 +26,7 @@ class GameStat {
   private learnedWords = 0;
 
   constructor(private game: 'sprint' | 'audioChallenge') {
-    this.loadUserWords();
+    if (this.auth.isLogedIn()) this.loadUserWords();
   }
 
   private stats: IStats = initStats;
