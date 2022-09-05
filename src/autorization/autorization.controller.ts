@@ -28,14 +28,7 @@ class AutorizationController {
         password: password.value,
       });
       if (await success) {
-        const navButtons = document.querySelector('div.nav > div') as HTMLDivElement;
-        const btnHTML = document.createElement('a');
-        btnHTML.href = '#stats';
-        btnHTML.innerText = 'Stats';
-        const img = document.createElement('img');
-        img.src = '/assets/img/statistics.svg';
-        btnHTML.appendChild(img);
-        navButtons.append(btnHTML);
+        this.addStatsForAutorized();
         this.listenLogoutButton();
       }
     });
@@ -53,6 +46,11 @@ class AutorizationController {
         password: password.value,
       });
       if (await success) {
+        new AutorizationModel().login({
+          email: email.value,
+          password: password.value,
+        });
+        this.addStatsForAutorized();
         this.listenLogoutButton();
       }
     });
@@ -66,6 +64,17 @@ class AutorizationController {
       stats?.remove();
       this.listenLoginButton();
     });
+  };
+
+  private addStatsForAutorized = () => {
+    const navButtons = document.querySelector('div.nav > div') as HTMLDivElement;
+    const btnHTML = document.createElement('a');
+    btnHTML.href = '#stats';
+    btnHTML.innerText = 'Stats';
+    const img = document.createElement('img');
+    img.src = '/assets/img/statistics.svg';
+    btnHTML.appendChild(img);
+    navButtons.append(btnHTML);
   };
 }
 
