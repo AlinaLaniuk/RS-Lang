@@ -204,7 +204,7 @@ class TextbookController {
       if (eventTarget.classList.contains('sprint')) {
         const controller = new SprintController();
         controller.launch(this.currentLevel, this.currentPage);
-      } else if (eventTarget.classList.contains('challenge')) {
+      } else if (eventTarget.classList.contains('audio-challenge')) {
         const controller = new ChallengeController();
         controller.launch(this.currentLevel, this.currentPage);
       }
